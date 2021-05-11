@@ -1,0 +1,15 @@
+{
+  "name": "wdth",
+  "version": "1.0.0",
+  "description": "twitter application for tracing the origin of rabbit hole tweets",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hayford Iduoriyekemwen",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "twitter-webhooks": "^0.3.3"
+  }
+}
