@@ -6,12 +6,12 @@ const https = require ('https');
 const app = express()
 app.use(bodyParser.json());
 
-const port = 3000
+const localPort = 3000
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-app.listen(port, () => {
+app.listen(process.env.PORT || localPort, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
