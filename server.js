@@ -42,7 +42,7 @@ userActivityWebhook.subscribe({
 });
 
 //listen to any user activity
-userActivityWebhook.on ('event', (event, userId, data) => console.log ('event:' event + ', userId: 'userId + ', data: ' + data));
+userActivityWebhook.on ('event', (event, userId, data) => console.log ('userId: 'userId + ', data: ' + data));
 
 //listen to unknown payload (in case of api new features)
 userActivityWebhook.on ('unknown-event', (rawData) => console.log (rawData));
