@@ -52,8 +52,6 @@ userActivityWebhook.on ('unknown-event', (rawData) => console.log (rawData));
 //   res.send('Hello World!')
 // })
 
-const server = https.createServer({
-    app
-});
-
-server.listen(port);
+app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`)
+})
