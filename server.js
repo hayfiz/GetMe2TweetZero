@@ -50,7 +50,7 @@ userActivityWebhook.subscribe({
 
 
 app.post('/', (req, res) => {
-  console.log(req);
+  console.log("logginggggg: " + req);
 })
 
 app.listen(port, () => {
