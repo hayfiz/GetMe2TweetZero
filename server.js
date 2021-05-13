@@ -65,7 +65,7 @@ userActivityWebhook.subscribe({
 
 // listen to any user activity
 userActivityWebhook.on ('event', (event, userId, data) => console.log (userId + ' - favorite'));
-userActivityWebhook.on ('event', (event, userId, data) => console.log ('event logging' + event));
+userActivityWebhook.on ('event', (event, userId, data) => console.log ('event logging: ' + data));
 
 userActivityWebhook.on ('direct_message', (event, userId, data) => console.log ('direct message received'));
 
