@@ -42,10 +42,10 @@ userActivityWebhook.subscribe({
     .on ('tweet_delete', (data) => console.log (userActivity.id + ' - tweet_delete'))
 });
 
-listen to any user activity
+// listen to any user activity
 userActivityWebhook.on ('event', (event, userId, data) => console.log (userId + ' - favorite'));
 
-listen to unknown payload (in case of api new features)
+// listen to unknown payload (in case of api new features)
 userActivityWebhook.on ('unknown-event', (rawData) => console.log (rawData));
 
 
