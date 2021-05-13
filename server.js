@@ -42,17 +42,17 @@ userActivityWebhook.subscribe({
     .on ('tweet_delete', (data) => console.log (userActivity.id + ' - tweet_delete'))
 });
 
-//listen to any user activity
-// userActivityWebhook.on ('event', (event, userId, data) => console.log (userId + ' - favorite'));
+listen to any user activity
+userActivityWebhook.on ('event', (event, userId, data) => console.log (userId + ' - favorite'));
 
-//listen to unknown payload (in case of api new features)
-// userActivityWebhook.on ('unknown-event', (rawData) => console.log (rawData));
+listen to unknown payload (in case of api new features)
+userActivityWebhook.on ('unknown-event', (rawData) => console.log (rawData));
 
 
-app.post('/', (req, res) => {
-  console.log("logginggggg: " + req);
-})
+// app.post('/', (req, res) => {
+//   console.log("logginggggg: " + req);
+// })
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+  console.log(`listening at http://localhost:${port}`)
 })
