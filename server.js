@@ -34,15 +34,15 @@ userActivityWebhook.subscribe({
 })
 .then(function (userActivity) {
     userActivity
-    .on('favorite', (data) => console.log (data+ ' - favorite'))
-    .on ('tweet_create', (data) => console.log (data + ' - tweet_create'))
-    .on ('follow', (data) => console.log (data + ' - follow'))
-    .on ('mute', (data) => console.log (data + ' - mute'))
-    .on ('revoke', (data) => console.log (data + ' - revoke'))
-    .on ('direct_message', (data) => console.log (data.toString() + ' - direct_message'))
-    .on ('direct_message_indicate_typing', (data) => console.log (data.toString() + ' - direct_message_indicate_typing'))
-    .on ('direct_message_mark_read', (data) => console.log (data.toString() + ' - direct_message_mark_read'))
-    .on ('tweet_delete', (data) => console.log (data + ' - tweet_delete'))
+    .on('favorite', (data) => console.log (data.id + ' - favorite'))
+    .on ('tweet_create', (data) => console.log (data.id + ' - tweet_create'))
+    .on ('follow', (data) => console.log (data.id + ' - follow'))
+    .on ('mute', (data) => console.log (data.id + ' - mute'))
+    .on ('revoke', (data) => console.log (data.id + ' - revoke'))
+    .on ('direct_message', (data) => console.log (data.id + ' - direct_message'))
+    .on ('direct_message_indicate_typing', (data) => console.log (data.id + ' - direct_message_indicate_typing'))
+    .on ('direct_message_mark_read', (data) => console.log (data.id + ' - direct_message_mark_read'))
+    .on ('tweet_delete', (data) => console.log (data.id + ' - tweet_delete'))
 
     // console.log('successfully subscribed')
 }).catch(err => {
@@ -65,9 +65,6 @@ userActivityWebhook.subscribe({
 
 // listen to any user activity
 userActivityWebhook.on ('event', (event, userId, data) => console.log (userId + ' - favorite'));
-userActivityWebhook.on ('event', (event, userId, data) => console.log ('event logging: ' + data));
-
-userActivityWebhook.on ('direct_message', (event, userId, data) => console.log ('direct message received'));
 
 // listen to unknown payload (in case of api new features)
 userActivityWebhook.on ('unknown-event', (rawData) => console.log (rawData));
