@@ -13,10 +13,10 @@ const userActivityWebhook = twitterWebhooks.userActivity({
     route: '/', //default : '/'
     consumerKey: 'PtQ6Alt8ZW4c2Y48sad6cZkKJ',
     consumerSecret: 'JDY0G3McBTKdyl6B6LtmpEN5vAxpgpIq7qp6k5shuYBvGn7YFY',
-    accessToken: '316270387-F1jRV5VeBoWkcz1fTyQCRnxEZErvgsJ2TSrER6cm',
-    accessTokenSecret: 'tvl0LHycdYl3SWbkpFSHqPCsSXxmsOZ10ccq36nR5fuuA',
+    // accessToken: '316270387-F1jRV5VeBoWkcz1fTyQCRnxEZErvgsJ2TSrER6cm',
+    // accessTokenSecret: 'tvl0LHycdYl3SWbkpFSHqPCsSXxmsOZ10ccq36nR5fuuA',
     environment: 'development', //default : 'env-beta'
-    appBearerToken: 'AAAAAAAAAAAAAAAAAAAAAM%2FsPQEAAAAAYa16T%2BFIkXX9fdO9xYdUBVX1wi8%3DY2ialfV498fCONhbWsTW4bo4gaWuJnkL7eZq5CRpjfOFhWVmS5'
+    appBearerToken: 'AAAAAAAAAAAAAAAAAAAAAM%2FsPQEAAAAAYa16T%2BFIkXX9fdO9xYdUBVX1wi8%3DY2ialfV498fCONhbWsTW4bo4gaWuJnkL7eZq5CRpjfOFhWVmS5',
     app
 });
 
