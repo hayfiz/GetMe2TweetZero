@@ -49,9 +49,9 @@ userActivityWebhook.subscribe({
 // userActivityWebhook.on ('unknown-event', (rawData) => console.log (rawData));
 
 
-// app.get('/', (req, res) => {
-//   res.send('Hello World!')
-// })
+app.post('/', (req, res) => {
+  console.log(req);
+})
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
