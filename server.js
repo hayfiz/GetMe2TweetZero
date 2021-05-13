@@ -48,6 +48,19 @@ const userActivityWebhook = twitterWebhooks.userActivity({
 //   console.log(err.body);
 // });
 
+// Unsubscribe for a particular user activity
+userActivityWebhook.subscribe({
+    userId: '316270387',
+    accessToken: '316270387-F1jRV5VeBoWkcz1fTyQCRnxEZErvgsJ2TSrER6cm',
+    accessTokenSecret: 'tvl0LHycdYl3SWbkpFSHqPCsSXxmsOZ10ccq36nR5fuuA'
+})
+.then(function (ret) {
+    console.log('unsubscribed: ' + ret)
+}).catch(err => {
+  console.log('err');
+  console.log(err.body);
+});
+
 // listen to any user activity
 userActivityWebhook.on ('event', (event, userId, data) => console.log (userId + ' - favorite'));
 userActivityWebhook.on ('event', (event, userId, data) => console.log ('event logging' + event));
