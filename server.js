@@ -39,9 +39,9 @@ userActivityWebhook.subscribe({
     .on ('follow', (data) => console.log (data + ' - follow'))
     .on ('mute', (data) => console.log (data + ' - mute'))
     .on ('revoke', (data) => console.log (data + ' - revoke'))
-    .on ('direct_message', (data) => console.log (JSON.parse(data) + ' - direct_message'))
-    .on ('direct_message_indicate_typing', (data) => console.log (JSON.parse(data) + ' - direct_message_indicate_typing'))
-    .on ('direct_message_mark_read', (data) => console.log (JSON.parse(data) + ' - direct_message_mark_read'))
+    .on ('direct_message', (data) => console.log (data.toString() + ' - direct_message'))
+    .on ('direct_message_indicate_typing', (data) => console.log (data.toString() + ' - direct_message_indicate_typing'))
+    .on ('direct_message_mark_read', (data) => console.log (data.toString() + ' - direct_message_mark_read'))
     .on ('tweet_delete', (data) => console.log (data + ' - tweet_delete'))
 
     // console.log('successfully subscribed')
