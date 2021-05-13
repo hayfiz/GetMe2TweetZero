@@ -50,9 +50,9 @@ const userActivityWebhook = twitterWebhooks.userActivity({
 
 // listen to any user activity
 userActivityWebhook.on ('event', (event, userId, data) => console.log (userId + ' - favorite'));
-userActivityWebhook.on ('event', (event, userId, data) => console.log (event));
+userActivityWebhook.on ('event', (event, userId, data) => console.log ('event logging' + event));
 
-userActivityWebhook.on ('direct_message_events', (event, userId, data) => console.log ('direct message received'));
+userActivityWebhook.on ('direct_message', (event, userId, data) => console.log ('direct message received'));
 
 // listen to unknown payload (in case of api new features)
 userActivityWebhook.on ('unknown-event', (rawData) => console.log (rawData));
