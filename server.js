@@ -21,7 +21,10 @@ const userActivityWebhook = twitterWebhooks.userActivity({
 });
 
 //Register your webhook url - just needed once per URL
-userActivityWebhook.register();
+userActivityWebhook.register().catch(err => {
+  console.log('err');
+  console.log(err);
+});;
 
 //Subscribe for a particular user activity
 userActivityWebhook.subscribe({
@@ -43,7 +46,7 @@ userActivityWebhook.subscribe({
 }).catch(err => {
   console.log('err');
   console.log(err);
-});;
+});
 
 // listen to any user activity
 userActivityWebhook.on ('event', (event, userId, data) => console.log (userId + ' - favorite'));
