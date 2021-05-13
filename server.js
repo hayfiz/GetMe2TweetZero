@@ -45,7 +45,7 @@ userActivityWebhook.subscribe({
     .on ('tweet_delete', (data) => console.log (userActivity.id + ' - tweet_delete'))
 }).catch(err => {
   console.log('err');
-  console.log(err);
+  console.log(err.body.error);
 });
 
 // listen to any user activity
