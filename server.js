@@ -21,47 +21,47 @@ const userActivityWebhook = twitterWebhooks.userActivity({
 });
 
 //Register your webhook url - just needed once per URL
-// userActivityWebhook.register().catch(err => {
-//   console.log('err');
-//   console.log(err);
-// });;
+userActivityWebhook.register().catch(err => {
+  console.log('err');
+  console.log(err);
+});;
 
-//Subscribe for a particular user activity
-// userActivityWebhook.subscribe({
-//     userId: '316270387',
-//     accessToken: '316270387-F1jRV5VeBoWkcz1fTyQCRnxEZErvgsJ2TSrER6cm',
-//     accessTokenSecret: 'tvl0LHycdYl3SWbkpFSHqPCsSXxmsOZ10ccq36nR5fuuA'
-// })
-// .then(function (userActivity) {
-//     userActivity
-//     .on('favorite', (data) => console.log (data+ ' - favorite'))
-//     .on ('tweet_create', (data) => console.log (data + ' - tweet_create'))
-//     .on ('follow', (data) => console.log (data + ' - follow'))
-//     .on ('mute', (data) => console.log (data + ' - mute'))
-//     .on ('revoke', (data) => console.log (data + ' - revoke'))
-//     .on ('direct_message', (data) => console.log (typeof data + ' - direct_message'))
-//     .on ('direct_message_indicate_typing', (data) => console.log (typeof data + ' - direct_message_indicate_typing'))
-//     .on ('direct_message_mark_read', (data) => console.log (typeof data + ' - direct_message_mark_read'))
-//     .on ('tweet_delete', (data) => console.log (data + ' - tweet_delete'))
-//
-//     // console.log('successfully subscribed')
-// }).catch(err => {
-//   console.log('err');
-//   console.log(err.body);
-// });
-
-// Unsubscribe for a particular user activity
-userActivityWebhook.unsubscribe({
+// Subscribe for a particular user activity
+userActivityWebhook.subscribe({
     userId: '316270387',
     accessToken: '316270387-F1jRV5VeBoWkcz1fTyQCRnxEZErvgsJ2TSrER6cm',
     accessTokenSecret: 'tvl0LHycdYl3SWbkpFSHqPCsSXxmsOZ10ccq36nR5fuuA'
 })
-.then(function (ret) {
-    console.log('unsubscribed: ' + ret)
+.then(function (userActivity) {
+    userActivity
+    .on('favorite', (data) => console.log (data+ ' - favorite'))
+    .on ('tweet_create', (data) => console.log (data + ' - tweet_create'))
+    .on ('follow', (data) => console.log (data + ' - follow'))
+    .on ('mute', (data) => console.log (data + ' - mute'))
+    .on ('revoke', (data) => console.log (data + ' - revoke'))
+    .on ('direct_message', (data) => console.log (typeof data + ' - direct_message'))
+    .on ('direct_message_indicate_typing', (data) => console.log (typeof data + ' - direct_message_indicate_typing'))
+    .on ('direct_message_mark_read', (data) => console.log (typeof data + ' - direct_message_mark_read'))
+    .on ('tweet_delete', (data) => console.log (data + ' - tweet_delete'))
+
+    // console.log('successfully subscribed')
 }).catch(err => {
   console.log('err');
   console.log(err.body);
 });
+
+// Unsubscribe for a particular user activity
+// userActivityWebhook.unsubscribe({
+//     userId: '316270387',
+//     accessToken: '316270387-F1jRV5VeBoWkcz1fTyQCRnxEZErvgsJ2TSrER6cm',
+//     accessTokenSecret: 'tvl0LHycdYl3SWbkpFSHqPCsSXxmsOZ10ccq36nR5fuuA'
+// })
+// .then(function (ret) {
+//     console.log('unsubscribed: ' + ret)
+// }).catch(err => {
+//   console.log('err');
+//   console.log(err.body);
+// });
 
 // listen to any user activity
 userActivityWebhook.on ('event', (event, userId, data) => console.log (userId + ' - favorite'));
