@@ -40,7 +40,10 @@ userActivityWebhook.subscribe({
     .on ('direct_message_indicate_typing', (data) => console.log (userActivity.id + ' - direct_message_indicate_typing'))
     .on ('direct_message_mark_read', (data) => console.log (userActivity.id + ' - direct_message_mark_read'))
     .on ('tweet_delete', (data) => console.log (userActivity.id + ' - tweet_delete'))
-});
+}).catch(err => {
+  console.log('err');
+  console.log(err);
+});;
 
 // listen to any user activity
 userActivityWebhook.on ('event', (event, userId, data) => console.log (userId + ' - favorite'));
