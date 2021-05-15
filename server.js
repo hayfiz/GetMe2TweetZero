@@ -59,7 +59,7 @@ userActivityWebhook.unsubscribe({
 .then(function (ret) {
     console.log('unsubscribed: ' + ret)
 }).catch(err => {
-  console.log('err');
+  console.log('err on unsubscribe');
   console.log(err.body);
 });
 
@@ -68,7 +68,7 @@ userActivityWebhook.getWebhooks()
 .then(function (ret) {
     console.log('webhooks: ' + ret)
 }).catch(err => {
-  console.log('err');
+  console.log('err on getWebhooks');
   console.log(err.body);
 });
 
