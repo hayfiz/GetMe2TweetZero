@@ -51,7 +51,7 @@ const userActivityWebhook = twitterWebhooks.userActivity({
 // });
 
 
-Unsubscribe for a particular user activity
+// Unsubscribe for a particular user activity
 userActivityWebhook.unsubscribe({
     userId: '316270387',
     accessToken: '316270387-F1jRV5VeBoWkcz1fTyQCRnxEZErvgsJ2TSrER6cm',
