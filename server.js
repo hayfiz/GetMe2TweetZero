@@ -64,9 +64,9 @@ userActivityWebhook.unsubscribe({
 });
 
 // Unsubscribe for a particular user activity
-userActivityWebhook.getSubscriptionsCount()
+userActivityWebhook.getWebhooks()
 .then(function (ret) {
-    console.log('subscriptions: ' + ret)
+    console.log('webhooks: ' + ret)
 }).catch(err => {
   console.log('err');
   console.log(err.body);
