@@ -66,7 +66,7 @@ const userActivityWebhook = twitterWebhooks.userActivity({
 // Unsubscribe for a particular user activity
 userActivityWebhook.getWebhook()
 .then(function (ret) {
-    console.log('webhooks: ' + ret[0]);
+    console.log('webhooks: ' + ret[0].url);
 }).catch(err => {
   console.log('err on getWebhooks');
   console.log(err.body);
