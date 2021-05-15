@@ -21,10 +21,10 @@ const userActivityWebhook = twitterWebhooks.userActivity({
 });
 
 //Register your webhook url - just needed once per URL
-userActivityWebhook.register().catch(err => {
-  console.log('err');
-  console.log(err);
-});;
+// userActivityWebhook.register().catch(err => {
+//   console.log('err on register');
+//   console.log(err);
+// });;
 
 // Subscribe for a particular user activity
 // userActivityWebhook.subscribe({
@@ -51,20 +51,20 @@ userActivityWebhook.register().catch(err => {
 // });
 
 // Unsubscribe for a particular user activity
-userActivityWebhook.unsubscribe({
-    userId: '316270387',
-    accessToken: '316270387-F1jRV5VeBoWkcz1fTyQCRnxEZErvgsJ2TSrER6cm',
-    accessTokenSecret: 'tvl0LHycdYl3SWbkpFSHqPCsSXxmsOZ10ccq36nR5fuuA'
-})
-.then(function (ret) {
-    console.log('unsubscribed: ' + ret)
-}).catch(err => {
-  console.log('err on unsubscribe');
-  console.log(err.body);
-});
+// userActivityWebhook.unsubscribe({
+//     userId: '316270387',
+//     accessToken: '316270387-F1jRV5VeBoWkcz1fTyQCRnxEZErvgsJ2TSrER6cm',
+//     accessTokenSecret: 'tvl0LHycdYl3SWbkpFSHqPCsSXxmsOZ10ccq36nR5fuuA'
+// })
+// .then(function (ret) {
+//     console.log('unsubscribed: ' + ret)
+// }).catch(err => {
+//   console.log('err on unsubscribe');
+//   console.log(err.body);
+// });
 
 // Unsubscribe for a particular user activity
-userActivityWebhook.getWebhooks()
+userActivityWebhook.getSubscriptionsCount()
 .then(function (ret) {
     console.log('webhooks: ' + ret)
 }).catch(err => {
