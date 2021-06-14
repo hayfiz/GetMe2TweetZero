@@ -121,11 +121,15 @@ const userActivityWebhook = twitterWebhooks.userActivity({
     app
 });
 
+/**
+
 //Register your webhook url - just needed once per URL
-// userActivityWebhook.register().catch(err => {
-//   console.log('err on register');
-//   console.log(err);
-// });;
+userActivityWebhook.register().catch(err => {
+  console.log('err on register');
+  console.log(err);
+});;
+
+*/
 
 
 // Unsubscribe for a particular user activity
@@ -141,7 +145,7 @@ userActivityWebhook.unsubscribe({
   console.log(err.body);
 });
 
-Subscribe for a particular user activity
+// Subscribe for a particular user activity
 userActivityWebhook.subscribe({
     userId: '316270387',
     accessToken: process.env.TWITTER_ACCESS_KEY,
