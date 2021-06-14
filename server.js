@@ -157,10 +157,13 @@ userActivityWebhook.unsubscribe({
         .on ('tweet_delete', (data) => console.log (JSON.stringify(data) + ' - tweet_delete'))
 
         // console.log('successfully subscribed')
-    }).catch(err => {
-      console.log('err on subscribe');
-      console.log(err.body);
-    });
+    })
+    .then(function (ret) {
+        console.log('Successfully subscribed to user activity ✅');
+      }).catch(err => {
+        console.log('err on subscribe');
+        console.log(err.body);
+      });
 }).catch(err => {
   console.log('err on unsubscribe');
   console.log(err.body);
