@@ -108,17 +108,17 @@ userActivityWebhook.register().catch(err => {
 
 
 // Unsubscribe for a particular user activity
-userActivityWebhook.unsubscribe({
-    userId: '316270387',
-    accessToken: process.env.TWITTER_ACCESS_KEY,
-    accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
-})
-.then(function (ret) {
-    console.log('Removed previous subscription for user activity ❌')
-}).catch(err => {
-  console.log('err on unsubscribe');
-  console.log(err.body);
-});
+// userActivityWebhook.unsubscribe({
+//     userId: '316270387',
+//     accessToken: process.env.TWITTER_ACCESS_KEY,
+//     accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+// })
+// .then(function (ret) {
+//     console.log('Removed previous subscription for user activity ❌')
+// }).catch(err => {
+//   console.log('err on unsubscribe');
+//   console.log(err.body);
+// });
 
 // Subscribe for a particular user activity
 userActivityWebhook.subscribe({
