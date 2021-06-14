@@ -36,31 +36,6 @@ var T = new Twit({
 // })
 
 
-/** Code to send a dm*/
-// const obj = {
-//       event: {
-//         type: 'message_create',
-//         message_create: {
-//           target: {
-//             recipient_id: 796702896,
-//           },
-//           message_data: {
-//             text: `Hi! 👋`,
-//           },
-//         },
-//       },
-//     };
-//
-// T.post("direct_messages/events/new", obj)
-//         .catch(err => {
-//           console.error("error", err.stack);
-//         })
-//         .then(result => {
-//           console.log(`Message sent successfully To  hype_central  💪💪`);
-//         });
-/***/
-
-
     // }, timeout);
 
 // getTwitterUserProfileWithOAuth1('hype_central')
@@ -139,7 +114,7 @@ userActivityWebhook.unsubscribe({
     accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
 })
 .then(function (ret) {
-    console.log('unsubscribed: ' + ret)
+    console.log('Removed previous subscription for user activity ❌')
 }).catch(err => {
   console.log('err on unsubscribe');
   console.log(err.body);
@@ -154,7 +129,30 @@ userActivityWebhook.subscribe({
 .then(function (userActivity) {
     userActivity
     .on('favorite', (data) => console.log (JSON.stringify(data) + ' - favorite'))
-    .on ('tweet_create', (data) => console.log (JSON.stringify(data) + ' - tweet_create'))
+    .on ('tweet_create', (data) => {
+      console.log (JSON.stringify(data) + ' - tweet_create')
+      var obj = {
+            event: {
+              type: 'message_create',
+              message_create: {
+                target: {
+                  recipient_id: data.user.id,
+                },
+                message_data: {
+                  text: `Baba funds dey come! 🔥`,
+                },
+              },
+            },
+          };
+
+      T.post("direct_messages/events/new", obj)
+          .catch(err => {
+            console.error("error", err.stack);
+          })
+          .then(result => {
+            console.log(`Message sent successfully To ${data.user.screen_name} 💪💪`);
+          });
+    })
     .on ('follow', (data) => console.log (JSON.stringify(data) + ' - follow'))
     .on ('mute', (data) => console.log (JSON.stringify(data) + ' - mute'))
     .on ('revoke', (data) => console.log (JSON.stringify(data) + ' - revoke'))
@@ -177,6 +175,11 @@ userActivityWebhook.subscribe({
 //   console.log('err on getWebhooks');
 //   console.log(err.body);
 // });
+
+/** Code to send a dm*/
+
+/***/
+
 
 // listen to any user activity
 // userActivityWebhook.on ('event', (event, userId, data) => console.log (userId + ' - favorite'));
