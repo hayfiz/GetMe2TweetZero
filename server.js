@@ -108,62 +108,61 @@ userActivityWebhook.register().catch(err => {
 
 
 // Unsubscribe for a particular user activity
-// userActivityWebhook.unsubscribe({
-//     userId: '316270387',
-//     accessToken: process.env.TWITTER_ACCESS_KEY,
-//     accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
-// })
-// .then(function (ret) {
-//     console.log('Removed previous subscription for user activity ❌')
-// }).catch(err => {
-//   console.log('err on unsubscribe');
-//   console.log(err.body);
-// });
-
-// Subscribe for a particular user activity
-userActivityWebhook.subscribe({
+userActivityWebhook.unsubscribe({
     userId: '316270387',
     accessToken: process.env.TWITTER_ACCESS_KEY,
     accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
 })
-.then(function (userActivity) {
-    userActivity
-    .on('favorite', (data) => console.log (JSON.stringify(data) + ' - favorite'))
-    .on ('tweet_create', (data) => {
-      console.log (JSON.stringify(data) + ' - tweet_create')
-      var obj = {
-            event: {
-              type: 'message_create',
-              message_create: {
-                target: {
-                  recipient_id: data.user.id,
-                },
-                message_data: {
-                  text: `Baba funds dey come! 🔥`,
-                },
-              },
-            },
-          };
-
-      T.post("direct_messages/events/new", obj)
-          .catch(err => {
-            console.error("error", err.stack);
-          })
-          .then(result => {
-            console.log(`Message sent successfully To ${data.user.screen_name} 💪💪`);
-          });
+.then(function (ret) {
+    console.log('Removed previous subscription for user activity ❌')
+    // Subscribe for a particular user activity
+    userActivityWebhook.subscribe({
+        userId: '316270387',
+        accessToken: process.env.TWITTER_ACCESS_KEY,
+        accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
     })
-    .on ('follow', (data) => console.log (JSON.stringify(data) + ' - follow'))
-    .on ('mute', (data) => console.log (JSON.stringify(data) + ' - mute'))
-    .on ('revoke', (data) => console.log (JSON.stringify(data) + ' - revoke'))
-    .on ('direct_message', (data) => console.log (JSON.stringify(data) + ' - direct_message'))
-    .on ('direct_message_indicate_typing', (data) => console.log (JSON.stringify(data) + ' - direct_message_indicate_typing'))
-    .on ('direct_message_mark_read', (data) => console.log (JSON.stringify(data) + ' - direct_message_mark_read'))
-    .on ('tweet_delete', (data) => console.log (JSON.stringify(data) + ' - tweet_delete'))
+    .then(function (userActivity) {
+        userActivity
+        .on('favorite', (data) => console.log (JSON.stringify(data) + ' - favorite'))
+        .on ('tweet_create', (data) => {
+          console.log (JSON.stringify(data) + ' - tweet_create')
+          var obj = {
+                event: {
+                  type: 'message_create',
+                  message_create: {
+                    target: {
+                      recipient_id: data.user.id,
+                    },
+                    message_data: {
+                      text: `Baba funds dey come! 🔥`,
+                    },
+                  },
+                },
+              };
 
-    // console.log('successfully subscribed')
+          T.post("direct_messages/events/new", obj)
+              .catch(err => {
+                console.error("error", err.stack);
+              })
+              .then(result => {
+                console.log(`Message sent successfully To ${data.user.screen_name} 💪💪`);
+              });
+        })
+        .on ('follow', (data) => console.log (JSON.stringify(data) + ' - follow'))
+        .on ('mute', (data) => console.log (JSON.stringify(data) + ' - mute'))
+        .on ('revoke', (data) => console.log (JSON.stringify(data) + ' - revoke'))
+        .on ('direct_message', (data) => console.log (JSON.stringify(data) + ' - direct_message'))
+        .on ('direct_message_indicate_typing', (data) => console.log (JSON.stringify(data) + ' - direct_message_indicate_typing'))
+        .on ('direct_message_mark_read', (data) => console.log (JSON.stringify(data) + ' - direct_message_mark_read'))
+        .on ('tweet_delete', (data) => console.log (JSON.stringify(data) + ' - tweet_delete'))
+
+        // console.log('successfully subscribed')
+    }).catch(err => {
+      console.log('err on subscribe');
+      console.log(err.body);
+    });
 }).catch(err => {
-  console.log('err on subscribe');
+  console.log('err on unsubscribe');
   console.log(err.body);
 });
 
