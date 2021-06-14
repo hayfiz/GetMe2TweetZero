@@ -22,22 +22,6 @@ var T = new Twit({
   strictSSL:            true,     // optional - requires SSL certificates to be valid.
 })
 
-// const stream = T.stream("user");
-// console.log("User stream started 🚀🚀🚀");
-//
-// stream.on("follow", console.log("followed"));
-// stream.on('user_event', function (eventMsg) {
-//   console.log(eventMsg)
-// });
-
-
-// T.get('followers/ids', { screen_name: 'hayfiz' },  function (err, data, response) {
-//   console.log(data)
-// })
-
-
-    // }, timeout);
-
 // getTwitterUserProfileWithOAuth1('hype_central')
 //   .then((profile) => console.log('oauth1 response', JSON.stringify(profile, null, 2)) && process.exit(0))
 //   .catch(err => console.error(err) && process.exit(1))
@@ -134,7 +118,7 @@ userActivityWebhook.unsubscribe({
                       recipient_id: data.user.id,
                     },
                     message_data: {
-                      text: `Baba funds dey come! 🔥`,
+                      text: `🤖: Thanks for reaching out. Hayford will get back to you ASAP`,
                     },
                   },
                 },
@@ -155,8 +139,6 @@ userActivityWebhook.unsubscribe({
         .on ('direct_message_indicate_typing', (data) => console.log (JSON.stringify(data) + ' - direct_message_indicate_typing'))
         .on ('direct_message_mark_read', (data) => console.log (JSON.stringify(data) + ' - direct_message_mark_read'))
         .on ('tweet_delete', (data) => console.log (JSON.stringify(data) + ' - tweet_delete'))
-
-        // console.log('successfully subscribed')
     })
     .then(function (ret) {
         console.log('Successfully subscribed to user activity ✅');
@@ -178,21 +160,12 @@ userActivityWebhook.unsubscribe({
 //   console.log(err.body);
 // });
 
-/** Code to send a dm*/
-
-/***/
-
 
 // listen to any user activity
 // userActivityWebhook.on ('event', (event, userId, data) => console.log (userId + ' - favorite'));
 
 // listen to unknown payload (in case of api new features)
 // userActivityWebhook.on ('unknown-event', (rawData) => console.log (rawData));
-
-
-// app.post('/', (req, res) => {
-//   console.log("logginggggg: " + req);
-// })
 
 app.listen(port, () => {
   console.log(`listening at http://localhost:${port}`)
