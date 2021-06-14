@@ -118,7 +118,7 @@ userActivityWebhook.unsubscribe({
                       recipient_id: data.user.id,
                     },
                     message_data: {
-                      text: `🤖: Thanks for reaching out. Hayford will get back to you ASAP`,
+                      text: `🤖: Thanks for reaching out ${data.user.screen_name}. Hayford will get back to you ASAP`,
                     },
                   },
                 },
