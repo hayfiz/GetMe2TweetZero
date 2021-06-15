@@ -3,7 +3,6 @@ const bodyParser = require ('body-parser');
 const twitterWebhooks = require('twitter-webhooks');
 const https = require ('https');
 
-const OAuth = require('oauth')
 const { promisify } = require('util')
 
 const app = express()
@@ -21,52 +20,6 @@ var T = new Twit({
   timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
   strictSSL:            true,     // optional - requires SSL certificates to be valid.
 })
-
-// getTwitterUserProfileWithOAuth1('hype_central')
-//   .then((profile) => console.log('oauth1 response', JSON.stringify(profile, null, 2)) && process.exit(0))
-//   .catch(err => console.error(err) && process.exit(1))
-//
-// async function getTwitterUserProfileWithOAuth1 (username = 'hype_central') {
-//   var oauth = new OAuth.OAuth(
-//     'https://api.twitter.com/oauth/request_token',
-//     'https://api.twitter.com/oauth/access_token',
-//     process.env.TWITTER_CONSUMER_KEY,
-//     process.env.TWITTER_CONSUMER_SECRET,
-//     '1.0A', null, 'HMAC-SHA1'
-//   )
-//   // const get = promisify(oauth.get.bind(oauth))
-//   //
-//   // const body = await get(
-//   //   `https://api.twitter.com/1.1/users/show.json?screen_name=${username}`,
-//   //   process.env.TWITTER_ACCESS_KEY,
-//   //   process.env.TWITTER_ACCESS_TOKEN_SECRET
-//   // )
-//
-//   var request_body = {
-//         event: {
-//           type: 'message_create',
-//           message_create: {
-//             target: {
-//               recipient_id: 796702896,
-//             },
-//             message_data: {
-//               text: `Hi! 👋`,
-//             },
-//           },
-//         },
-//       };
-//
-//   const post = promisify(oauth.post.bind(oauth))
-//
-//   const body = await post(
-//     'https://api.twitter.com/1.1/direct_messages/events/new.json',
-//     process.env.TWITTER_ACCESS_KEY,
-//     process.env.TWITTER_ACCESS_TOKEN_SECRET,
-//     JSON.stringify(request_body)
-//   )
-//
-//   return JSON.parse(body)
-// }
 
 const userActivityWebhook = twitterWebhooks.userActivity({
     serverUrl: 'https://whats-down-this-hole.herokuapp.com/',
@@ -118,7 +71,7 @@ userActivityWebhook.unsubscribe({
                       recipient_id: data.user.id,
                     },
                     message_data: {
-                      text: `🤖: Thanks for reaching out ${data.user.screen_name}. Hayford will get back to you ASAP`,
+                      text: `🤖: Thanks for reaching out ${data.user.name}. Hayford will get back to you ASAP`,
                     },
                   },
                 },
@@ -131,21 +84,21 @@ userActivityWebhook.unsubscribe({
               .then(result => {
                 console.log(`Message sent successfully To ${data.user.screen_name} 💪💪`);
               });
-        })
-        .on ('follow', (data) => console.log (JSON.stringify(data) + ' - follow'))
-        .on ('mute', (data) => console.log (JSON.stringify(data) + ' - mute'))
-        .on ('revoke', (data) => console.log (JSON.stringify(data) + ' - revoke'))
-        .on ('direct_message', (data) => console.log (JSON.stringify(data) + ' - direct_message'))
-        .on ('direct_message_indicate_typing', (data) => console.log (JSON.stringify(data) + ' - direct_message_indicate_typing'))
-        .on ('direct_message_mark_read', (data) => console.log (JSON.stringify(data) + ' - direct_message_mark_read'))
-        .on ('tweet_delete', (data) => console.log (JSON.stringify(data) + ' - tweet_delete'))
-    })
-    .then(function (ret) {
-        console.log('Successfully subscribed to user activity ✅');
-      }).catch(err => {
-        console.log('err on subscribe');
-        console.log(err.body);
-      });
+            })
+            .on ('follow', (data) => console.log (JSON.stringify(data) + ' - follow'))
+            .on ('mute', (data) => console.log (JSON.stringify(data) + ' - mute'))
+            .on ('revoke', (data) => console.log (JSON.stringify(data) + ' - revoke'))
+            .on ('direct_message', (data) => console.log (JSON.stringify(data) + ' - direct_message'))
+            .on ('direct_message_indicate_typing', (data) => console.log (JSON.stringify(data) + ' - direct_message_indicate_typing'))
+            .on ('direct_message_mark_read', (data) => console.log (JSON.stringify(data) + ' - direct_message_mark_read'))
+            .on ('tweet_delete', (data) => console.log (JSON.stringify(data) + ' - tweet_delete'))
+          })
+          .then(function (ret) {
+            console.log('Successfully subscribed to user activity ✅');
+          }).catch(err => {
+            console.log('err on subscribe');
+            console.log(err.body);
+          });
 }).catch(err => {
   console.log('err on unsubscribe');
   console.log(err.body);
@@ -159,13 +112,6 @@ userActivityWebhook.unsubscribe({
 //   console.log('err on getWebhooks');
 //   console.log(err.body);
 // });
-
-
-// listen to any user activity
-// userActivityWebhook.on ('event', (event, userId, data) => console.log (userId + ' - favorite'));
-
-// listen to unknown payload (in case of api new features)
-// userActivityWebhook.on ('unknown-event', (rawData) => console.log (rawData));
 
 app.listen(port, () => {
   console.log(`listening at http://localhost:${port}`)
