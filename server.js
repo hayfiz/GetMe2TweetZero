@@ -153,6 +153,7 @@ var options = {
 };
 
 function callback(error, response, body) {
+  console.log(body);
     if (!error && response.statusCode == 200) {
         console.log(body);
     }
