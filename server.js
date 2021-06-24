@@ -29,10 +29,11 @@ const userActivityWebhook = twitterWebhooks.userActivity({
     accessToken: process.env.TWITTER_ACCESS_KEY,
     accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
     environment: 'development', //default : 'env-beta'
-    appBearerToken: 'AAAAAAAAAAAAAAAAAAAAAM%2FsPQEAAAAAYa16T%2BFIkXX9fdO9xYdUBVX1wi8%3DY2ialfV498fCONhbWsTW4bo4gaWuJnkL7eZq5CRpjfOFhWVmS5',
+    appBearerToken: 'AAAAAAAAAAAAAAAAAAAAAM%2FsPQEAAAAAYa16T%2BFIkXX9fdO9xYdUBVX1wi8%3DY2ialfV498fCONhbWsTW4bo4gaWuJnkL7eZq5CRpjfOFhWVmS5', //// TODO: Move bearer token to env variable
     app
 });
 
+//// TODO:  Combine methods below to register webhook if none is registered
 /**
 
 //Register your webhook url - just needed once per URL
@@ -43,6 +44,14 @@ userActivityWebhook.register().catch(err => {
 
 */
 
+// Get webhook info
+// userActivityWebhook.getWebhook()
+// .then(function (ret) {
+//     console.log('webhook info: ' + JSON.stringify(ret[0]));
+// }).catch(err => {
+//   console.log('err on getWebhooks');
+//   console.log(err.body);
+// });
 
 // Unsubscribe for a particular user activity
 userActivityWebhook.unsubscribe({
@@ -96,23 +105,41 @@ userActivityWebhook.unsubscribe({
           .then(function (ret) {
             console.log('Successfully subscribed to user activity ✅');
           }).catch(err => {
-            console.log('err on subscribe');
+            console.log('err on subscribe 🤮');
             console.log(err.body);
           });
 }).catch(err => {
-  console.log('err on unsubscribe');
+  console.log('err on unsubscribe 🤮');
   console.log(err.body);
 });
 
-// Get webhook info
-// userActivityWebhook.getWebhook()
-// .then(function (ret) {
-//     console.log('webhook info: ' + JSON.stringify(ret[0]));
-// }).catch(err => {
-//   console.log('err on getWebhooks');
-//   console.log(err.body);
-// });
+function digTweet(data, recipient_id) {
+  //search for referenced tweets
+
+  //call digTweet on referenced tweets
+
+
+  //dm referenced tweet to owner
+  var tweetString = `https://twitter.com/${data.user.screen_name}/status/${data.id_str}`;
+  var msg = {
+        event: {
+          type: 'message_create',
+          message_create: {
+            target: {
+              recipient_id: data.user.id,
+            },
+            message_data: {
+              text: tweetString,
+            },
+          },
+        },
+      };
+}
+
+T.get('tweets/:id?tweet.fields=referenced_tweets', { id: '1408182889578217475' }, function (err, data, response) {
+  console.log(data)
+})
 
 app.listen(port, () => {
-  console.log(`listening at http://localhost:${port}`)
+  console.log(`listening at http://localhost:${port} 🤙🏾`)
 })
