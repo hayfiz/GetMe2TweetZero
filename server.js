@@ -147,11 +147,12 @@ var headers = {
 };
 
 var options = {
-    url: 'https://api.twitter.com/labs/2/tweets/1138505981460193280?expansions=attachments.media_keys&tweet.fields=created_at,author_id,lang,source,public_metrics,context_annotations,entities',
+    url: 'https://api.twitter.com/labs/2/tweets/1408182889578217475?expansions=attachments.media_keys&tweet.fields=created_at,author_id,lang,source,public_metrics,context_annotations,entities',
     headers: headers
 };
 
 function callback(error, response, body) {
+    console.log("callback initiated")
     if (!error && response.statusCode == 200) {
         console.log(body);
     }
