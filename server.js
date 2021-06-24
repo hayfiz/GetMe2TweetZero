@@ -153,9 +153,9 @@ var options = {
 
 function callback(error, response, body) {
     console.log("callback initiated")
-    if (!error && response.statusCode == 200) {
+    // if (!error && response.statusCode == 200) {
         console.log(body);
-    }
+    // }
 }
 
 request(options, callback);
