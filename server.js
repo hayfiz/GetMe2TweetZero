@@ -143,22 +143,23 @@ function digTweet(data, recipient_id) {
 var request = require('request');
 
 var headers = {
-    'Authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAAM%2FsPQEAAAAAYa16T%2BFIkXX9fdO9xYdUBVX1wi8%3DY2ialfV498fCONhbWsTW4bo4gaWuJnkL7eZq5CRpjfOFhWVmS5'
+    'Authorization': 'OAuth oauth_consumer_key="PtQ6Alt8ZW4c2Y48sad6cZkKJ",oauth_token="316270387-F1jRV5VeBoWkcz1fTyQCRnxEZErvgsJ2TSrER6cm",oauth_signature_method="HMAC-SHA1",oauth_timestamp="1624572624",oauth_nonce="gUhLtE8M0yN",oauth_version="1.0",oauth_signature="1pFi3C%2Ftk42iKBv7WrfzkAp01Eg%3D"',
+    'Cookie': 'guest_id=v1%3A162088818648439981; personalization_id=v1_x0G0pyVUfxh6NfBACXkQ7w=='
 };
 
 var options = {
-    url: 'https://api.twitter.com/labs/2/tweets/1408182889578217475?expansions=attachments.media_keys&tweet.fields=created_at,author_id,lang,source,public_metrics,context_annotations,entities',
+    url: 'https://api.twitter.com/2/tweets/1408182889578217475?tweet.fields=referenced_tweets',
     headers: headers
 };
 
 function callback(error, response, body) {
-    console.log("callback initiated")
-    // if (!error && response.statusCode == 200) {
+    if (!error && response.statusCode == 200) {
         console.log(body);
-    // }
+    }
 }
 
 request(options, callback);
+
 
 
 app.listen(port, () => {
