@@ -136,9 +136,29 @@ function digTweet(data, recipient_id) {
       };
 }
 
-T.get('/tweets/', { id: '1408182889578217475' }, function (err, data, response) {
-  console.log(data)
-})
+// T.get('/tweets/', { id: '1408182889578217475' }, function (err, data, response) {
+//   console.log(data)
+// })
+
+var request = require('request');
+
+var headers = {
+    'Authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAAM%2FsPQEAAAAAYa16T%2BFIkXX9fdO9xYdUBVX1wi8%3DY2ialfV498fCONhbWsTW4bo4gaWuJnkL7eZq5CRpjfOFhWVmS5'
+};
+
+var options = {
+    url: 'https://api.twitter.com/labs/2/tweets/1138505981460193280?expansions=attachments.media_keys&tweet.fields=created_at,author_id,lang,source,public_metrics,context_annotations,entities',
+    headers: headers
+};
+
+function callback(error, response, body) {
+    if (!error && response.statusCode == 200) {
+        console.log(body);
+    }
+}
+
+request(options, callback);
+
 
 app.listen(port, () => {
   console.log(`listening at http://localhost:${port} 🤙🏾`)
