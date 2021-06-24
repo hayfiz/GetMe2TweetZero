@@ -136,7 +136,7 @@ function digTweet(data, recipient_id) {
       };
 }
 
-T.get('tweets/:id?tweet.fields=referenced_tweets', { id: '1408182889578217475' }, function (err, data, response) {
+T.get('tweets/:id', { id: '1408182889578217475' }, function (err, data, response) {
   console.log(data)
 })
 
