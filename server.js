@@ -132,7 +132,7 @@ function digTweet(authorUserName, tweetId, recipientId) {
 
   //search for referenced tweets
   testCall(tweetId).then((value) => {
-    console.log(JSON.stringify(value)));
+    console.log(JSON.stringify(value));
 
     var authorUserName = value.includes.users[0].username;
     var tweetId = value.data.referenced_tweets[0].id;
