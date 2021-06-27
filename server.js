@@ -171,7 +171,7 @@ function digTweet(authorUserName, tweetId, recipientId) {
 
     console.log('Tweet>>>>>>>>> ' + tweetString);
   }
-}
+// }
 
 function testCall(tweetId) {
   return tweetSearchedFor = client.v2.singleTweet(tweetId, {
