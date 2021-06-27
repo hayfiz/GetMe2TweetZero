@@ -153,13 +153,14 @@ async function testCall() {
     expansions: [
       'entities.mentions.username',
       'in_reply_to_user_id',
+      'name'
     ],
     'tweet.fields': ['referenced_tweets'],
     'user.fields': ['name'],
   });
 };
 
-testCall().then((value) => console.log(JSON.stringify(value.data)));
+testCall().then((value) => console.log(JSON.stringify(value)));
 
 app.listen(port, () => {
   console.log(`listening at http://localhost:${port} 🤙🏾`)
