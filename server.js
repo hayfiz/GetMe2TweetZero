@@ -148,14 +148,16 @@ function digTweet(data, recipient_id) {
       };
 }
 
-let tweetSearchedFor = await client.v2.singleTweet('1408182889578217475', {
-  expansions: [
-    'entities.mentions.username',
-    'in_reply_to_user_id',
-  ],
-});
+async function testCall() {
+  return tweetSearchedFor = await client.v2.singleTweet('1408182889578217475', {
+    expansions: [
+      'entities.mentions.username',
+      'in_reply_to_user_id',
+    ],
+  });
+};
 
-tweetSearchedFor().then((value) => console.log(value));
+testCall().then((value) => console.log(value));
 
 // T.get('/tweets/', { id: '1408182889578217475' }, function (err, data, response) {
 //   console.log(data)
