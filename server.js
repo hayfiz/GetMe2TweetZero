@@ -141,7 +141,6 @@ function digTweet(authorUserName, tweetId, recipientId) {
     //call digTweet on referenced tweets
     digTweet(authorUserName, tweetId, recipientId);
 
-
     //dm referenced tweet to owner
     var tweetString = `https://twitter.com/${authorUserName}/status/${tweetId}`;
     var msg = {
@@ -166,7 +165,7 @@ function digTweet(authorUserName, tweetId, recipientId) {
     //     .then(result => {
     //       console.log(`Message sent successfully To ${recipientId} 💪💪`);
     //     });
-  };
+  });
 }
 
 async function testCall(tweetId) {
