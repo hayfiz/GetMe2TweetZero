@@ -133,22 +133,23 @@ function digTweet(authorUserName, tweetId, recipientId) {
   if (tweetId) {
   //search for referenced tweets
     // testCall(tweetId).then(
-      (testCall(tweetId)) => {
-      if (value && value.data.referenced_tweets) {
-        var authorUserName = value.includes.users[0].username;
-        var tweetId = value.data.referenced_tweets[0].id;
-        var recipientId = recipientId;
-
-        //call digTweet on referenced tweets
-        digTweet(authorUserName, tweetId, recipientId);
-        // T.post("direct_messages/events/new", msg)
-        //     .catch(err => {
-        //       console.error("error", err.stack);
-        //     })
-        //     .then(result => {
-        //       console.log(`Message sent successfully To ${recipientId} 💪💪`);
-        //     });
-      }
+      // (testCall(tweetId)) => {
+      // if (value && value.data.referenced_tweets) {
+      //   var authorUserName = value.includes.users[0].username;
+      //   var tweetId = value.data.referenced_tweets[0].id;
+      //   var recipientId = recipientId;
+      //
+      //   //call digTweet on referenced tweets
+      //   digTweet(authorUserName, tweetId, recipientId);
+      //   // T.post("direct_messages/events/new", msg)
+      //   //     .catch(err => {
+      //   //       console.error("error", err.stack);
+      //   //     })
+      //   //     .then(result => {
+      //   //       console.log(`Message sent successfully To ${recipientId} 💪💪`);
+      //   //     });
+      // }
+      searchTweet(testCall(tweetId));
     }
   // );
 
@@ -179,6 +180,25 @@ function testCall(tweetId) {
     ],
     'tweet.fields': ['referenced_tweets']
   });
+};
+
+function searchTweet(value) {
+if (value && value.data.referenced_tweets) {
+  var authorUserName = value.includes.users[0].username;
+  var tweetId = value.data.referenced_tweets[0].id;
+  var recipientId = recipientId;
+
+  //call digTweet on referenced tweets
+  digTweet(authorUserName, tweetId, recipientId);
+  // T.post("direct_messages/events/new", msg)
+  //     .catch(err => {
+  //       console.error("error", err.stack);
+  //     })
+  //     .then(result => {
+  //       console.log(`Message sent successfully To ${recipientId} 💪💪`);
+  //     });
+}
+
 };
 
 digTweet('hayfiz', '1408182964282957827', '316270387');
