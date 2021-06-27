@@ -148,19 +148,16 @@ function digTweet(data, recipient_id) {
       };
 }
 
-async function testCall() {
-  return tweetSearchedFor = await client.v2.singleTweet('1408182964282957827', {
+async function testCall(tweetId) {
+  return tweetSearchedFor = await client.v2.singleTweet(tweetId, {
     expansions: [
-      'entities.mentions.username',
-      'in_reply_to_user_id',
-      'name'
+      'referenced_tweets.id.author_id'
     ],
-    'tweet.fields': ['referenced_tweets'],
-    'user.fields': ['name'],
+    'tweet.fields': ['referenced_tweets']
   });
 };
 
-testCall().then((value) => console.log(JSON.stringify(value)));
+testCall('1408182964282957827').then((value) => console.log(JSON.stringify(value.data)));
 
 app.listen(port, () => {
   console.log(`listening at http://localhost:${port} 🤙🏾`)
