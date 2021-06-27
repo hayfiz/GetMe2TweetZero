@@ -155,10 +155,11 @@ async function testCall() {
       'in_reply_to_user_id',
     ],
     'tweet.fields': ['referenced_tweets'],
+    'user.fields': ['name'],
   });
 };
 
-testCall().then((value) => console.log(JSON.stringify(value.data.referenced_tweets)));
+testCall().then((value) => console.log(JSON.stringify(value.data)));
 
 app.listen(port, () => {
   console.log(`listening at http://localhost:${port} 🤙🏾`)
