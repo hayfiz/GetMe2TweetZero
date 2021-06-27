@@ -150,7 +150,7 @@ function digTweet(data, recipient_id) {
 
 async function testCall(tweetId) {
   return tweetSearchedFor = await client.v2.singleTweet(tweetId, {
-    expansions: [
+    'expansions': [
       'referenced_tweets.id.author_id'
     ],
     'tweet.fields': ['referenced_tweets']
