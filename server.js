@@ -154,7 +154,7 @@ async function testCall() {
       'entities.mentions.username',
       'in_reply_to_user_id',
     ],
-    tweet.fields: ['referenced_tweets'],
+    'tweet.fields': ['referenced_tweets'],
   });
 };
 
