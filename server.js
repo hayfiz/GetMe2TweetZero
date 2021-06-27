@@ -158,7 +158,7 @@ function digTweet(authorUserName, tweetId, recipientId) {
               },
             };
 
-        console.log('Tweet>>>>>>>>>' tweetString);
+        console.log('Tweet>>>>>>>>> ' + tweetString);
         // T.post("direct_messages/events/new", msg)
         //     .catch(err => {
         //       console.error("error", err.stack);
