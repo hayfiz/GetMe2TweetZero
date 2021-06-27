@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require ('body-parser');
 const twitterWebhooks = require('twitter-webhooks');
 const https = require ('https');
-const TwitterApi = require('twitter-api-v2');
+const { TwitterApi } = require('twitter-api-v2');
 
 const { promisify } = require('util')
 
