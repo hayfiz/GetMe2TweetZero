@@ -158,7 +158,7 @@ async function testCall() {
   });
 };
 
-testCall().then((value) => console.log(value));
+testCall().then((value) => console.log(value.referenced_tweets));
 
 app.listen(port, () => {
   console.log(`listening at http://localhost:${port} 🤙🏾`)
