@@ -183,7 +183,7 @@ function testCall(tweetId) {
 };
 
 function searchTweet(value) {
-if (value && value.data.referenced_tweets) {
+if (value) {
   var authorUserName = value.includes.users[0].username;
   var tweetId = value.data.referenced_tweets[0].id;
   var recipientId = recipientId;
