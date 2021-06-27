@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require ('body-parser');
 const twitterWebhooks = require('twitter-webhooks');
 const https = require ('https');
+const TwitterApi = require('twitter-api-v2');
 
 const { promisify } = require('util')
 
@@ -20,6 +21,17 @@ var T = new Twit({
   timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
   strictSSL:            true,     // optional - requires SSL certificates to be valid.
 })
+
+// OAuth 1.0a (User context)
+const client = new TwitterApi({
+  appKey: process.env.TWITTER_CONSUMER_KEY,
+  appSecret: process.env.TWITTER_CONSUMER_SECRET,
+  // Following access tokens are not required if you are
+  // at part 1 of user-auth process (ask for a request token)
+  // or if you want a app-only client (see below)
+  accessToken: process.env.TWITTER_ACCESS_KEY,
+  accessSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
+});
 
 const userActivityWebhook = twitterWebhooks.userActivity({
     serverUrl: 'https://whats-down-this-hole.herokuapp.com/',
@@ -136,29 +148,32 @@ function digTweet(data, recipient_id) {
       };
 }
 
+const tweetSearchedFor = await client.v2.singleTweet('1408182889578217475', {
+  expansions: [
+    'entities.mentions.username',
+    'in_reply_to_user_id',
+  ],
+});
+
+tweetSearchedFor().then((value) => console.log(value));
+
 // T.get('/tweets/', { id: '1408182889578217475' }, function (err, data, response) {
 //   console.log(data)
 // })
 
-var axios = require('axios');
-
-var config = {
-  method: 'get',
-  url: 'https://api.twitter.com/2/tweets/1408182889578217475?tweet.fields=referenced_tweets',
-  headers: {
-    'Authorization': 'OAuth oauth_consumer_key="PtQ6Alt8ZW4c2Y48sad6cZkKJ",oauth_token="316270387-F1jRV5VeBoWkcz1fTyQCRnxEZErvgsJ2TSrER6cm",oauth_signature_method="HMAC-SHA1",oauth_timestamp="1624575136",oauth_nonce="GtC9Se54dmt",oauth_version="1.0",oauth_signature="tkkZrtFxxSVEuVn1j%2Bt7loXhV%2BI%3D"',
+var request = require('request');
+var options = {
+  'method': 'GET',
+  'url': 'https://api.twitter.com/2/tweets/1408182889578217475?tweet.fields=referenced_tweets',
+  'headers': {
+    'Authorization': 'OAuth oauth_consumer_key="PtQ6Alt8ZW4c2Y48sad6cZkKJ",oauth_token="316270387-F1jRV5VeBoWkcz1fTyQCRnxEZErvgsJ2TSrER6cm",oauth_signature_method="HMAC-SHA1",oauth_timestamp="1624575239",oauth_nonce="SkFFAaTShvm",oauth_version="1.0",oauth_signature="YNy3RR6oHdX9vN3zNKs206wSIi8%3D"',
     'Cookie': 'guest_id=v1%3A162088818648439981; personalization_id="v1_x0G0pyVUfxh6NfBACXkQ7w=="'
   }
 };
-
-axios(config)
-.then(function (response) {
-  console.log(JSON.stringify(response.data));
-})
-.catch(function (error) {
-  console.log(error);
+request(options, function (error, response) {
+  if (error) throw new Error(error);
+  console.log(response.body);
 });
-
 
 
 
