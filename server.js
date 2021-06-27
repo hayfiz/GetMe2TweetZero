@@ -125,27 +125,48 @@ userActivityWebhook.unsubscribe({
   console.log(err.body);
 });
 
-function digTweet(data, recipient_id) {
+function digTweet(authorUserName, tweetId, , recipientId) {
+  //authorUserName - data.user.screen_name
+  //tweetId - data.id_str
+  //recipientId - data.user.id
+
   //search for referenced tweets
+  testCall(tweetId).then((value) => {
+    console.log(JSON.stringify(value)));
 
-  //call digTweet on referenced tweets
+    var authorUserName = value.includes.users[0].username;
+    var tweetId = value.data.referenced_tweets[0].id;
+    var recipientId = recipientId;
+
+    //call digTweet on referenced tweets
+    digTweet(authorUserName, tweetId, recipientId);
 
 
-  //dm referenced tweet to owner
-  var tweetString = `https://twitter.com/${data.user.screen_name}/status/${data.id_str}`;
-  var msg = {
-        event: {
-          type: 'message_create',
-          message_create: {
-            target: {
-              recipient_id: data.user.id,
-            },
-            message_data: {
-              text: tweetString,
+    //dm referenced tweet to owner
+    var tweetString = `https://twitter.com/${authorUserName}/status/${tweetId}`;
+    var msg = {
+          event: {
+            type: 'message_create',
+            message_create: {
+              target: {
+                recipient_id: recipientId,
+              },
+              message_data: {
+                text: tweetString,
+              },
             },
           },
-        },
-      };
+        };
+
+    console.log(tweetString);
+    // T.post("direct_messages/events/new", msg)
+    //     .catch(err => {
+    //       console.error("error", err.stack);
+    //     })
+    //     .then(result => {
+    //       console.log(`Message sent successfully To ${recipientId} 💪💪`);
+    //     });
+  };
 }
 
 async function testCall(tweetId) {
@@ -157,7 +178,7 @@ async function testCall(tweetId) {
   });
 };
 
-testCall('1408182964282957827').then((value) => console.log(JSON.stringify(value)));
+digTweet('hayfiz', '1408182889578217475', '316270387');
 
 app.listen(port, () => {
   console.log(`listening at http://localhost:${port} 🤙🏾`)
