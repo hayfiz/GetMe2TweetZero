@@ -125,7 +125,7 @@ userActivityWebhook.unsubscribe({
   console.log(err.body);
 });
 
-function digTweet(authorUserName, tweetId, , recipientId) {
+function digTweet(authorUserName, tweetId, recipientId) {
   //authorUserName - data.user.screen_name
   //tweetId - data.id_str
   //recipientId - data.user.id
