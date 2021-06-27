@@ -132,26 +132,23 @@ function digTweet(authorUserName, tweetId, recipientId) {
 
   if (tweetId) {
   //search for referenced tweets
-    // testCall(tweetId).then(
-      // (testCall(tweetId)) => {
-      // if (value && value.data.referenced_tweets) {
-      //   var authorUserName = value.includes.users[0].username;
-      //   var tweetId = value.data.referenced_tweets[0].id;
-      //   var recipientId = recipientId;
-      //
-      //   //call digTweet on referenced tweets
-      //   digTweet(authorUserName, tweetId, recipientId);
-      //   // T.post("direct_messages/events/new", msg)
-      //   //     .catch(err => {
-      //   //       console.error("error", err.stack);
-      //   //     })
-      //   //     .then(result => {
-      //   //       console.log(`Message sent successfully To ${recipientId} 💪💪`);
-      //   //     });
-      // }
-      searchTweet(testCall(tweetId));
-    }
-  // );
+    testCall(tweetId).then((value) => {
+      if (value && value.data.referenced_tweets) {
+        var authorUserName = value.includes.users[0].username;
+        var tweetId = value.data.referenced_tweets[0].id;
+        var recipientId = recipientId;
+
+        //call digTweet on referenced tweets
+        digTweet(authorUserName, tweetId, recipientId);
+        // T.post("direct_messages/events/new", msg)
+        //     .catch(err => {
+        //       console.error("error", err.stack);
+        //     })
+        //     .then(result => {
+        //       console.log(`Message sent successfully To ${recipientId} 💪💪`);
+        //     });
+      }
+    });
 
     //dm referenced tweet to owner
     var tweetString = `https://twitter.com/${authorUserName}/status/${tweetId}`;
@@ -171,34 +168,15 @@ function digTweet(authorUserName, tweetId, recipientId) {
 
     console.log('Tweet>>>>>>>>> ' + tweetString);
   }
-// }
+}
 
-function testCall(tweetId) {
-  return tweetSearchedFor = client.v2.singleTweet(tweetId, {
+async function testCall(tweetId) {
+  return tweetSearchedFor = await client.v2.singleTweet(tweetId, {
     'expansions': [
       'referenced_tweets.id.author_id'
     ],
     'tweet.fields': ['referenced_tweets']
   });
-};
-
-function searchTweet(value) {
-if (value) {
-  var authorUserName = value.includes.users[0].username;
-  var tweetId = value.data.referenced_tweets[0].id;
-  var recipientId = recipientId;
-
-  //call digTweet on referenced tweets
-  digTweet(authorUserName, tweetId, recipientId);
-  // T.post("direct_messages/events/new", msg)
-  //     .catch(err => {
-  //       console.error("error", err.stack);
-  //     })
-  //     .then(result => {
-  //       console.log(`Message sent successfully To ${recipientId} 💪💪`);
-  //     });
-}
-
 };
 
 digTweet('hayfiz', '1408182964282957827', '316270387');
