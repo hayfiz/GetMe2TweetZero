@@ -147,26 +147,29 @@ function digTweet(authorUserName, tweetId, recipientId) {
         //     .then(result => {
         //       console.log(`Message sent successfully To ${recipientId} 💪💪`);
         //     });
-      }
-    });
 
-    //dm referenced tweet to owner
-    var tweetString = `https://twitter.com/${authorUserName}/status/${tweetId}`;
-    var msg = {
-          event: {
-            type: 'message_create',
-            message_create: {
-              target: {
-                recipient_id: recipientId,
-              },
-              message_data: {
-                text: tweetString,
+        return value;
+      }
+    }).then((val) => {
+      //dm referenced tweet to owner
+      var tweetString = `https://twitter.com/${authorUserName}/status/${tweetId}`;
+      var msg = {
+            event: {
+              type: 'message_create',
+              message_create: {
+                target: {
+                  recipient_id: recipientId,
+                },
+                message_data: {
+                  text: tweetString,
+                },
               },
             },
-          },
-        };
+          };
 
-    console.log('Tweet>>>>>>>>> ' + tweetString);
+      console.log('Tweet>>>>>>>>> ' + tweetString);
+
+    });
   }
 }
 
