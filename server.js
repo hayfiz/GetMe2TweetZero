@@ -149,35 +149,16 @@ function digTweet(data, recipient_id) {
 }
 
 async function testCall() {
-  return tweetSearchedFor = await client.v2.singleTweet('1408182889578217475', {
+  return tweetSearchedFor = await client.v2.singleTweet('1408182964282957827', {
     expansions: [
       'entities.mentions.username',
       'in_reply_to_user_id',
     ],
+    tweet.fields: ['referenced_tweets'],
   });
 };
 
 testCall().then((value) => console.log(value));
-
-// T.get('/tweets/', { id: '1408182889578217475' }, function (err, data, response) {
-//   console.log(data)
-// })
-
-var request = require('request');
-var options = {
-  'method': 'GET',
-  'url': 'https://api.twitter.com/2/tweets/1408182889578217475?tweet.fields=referenced_tweets',
-  'headers': {
-    'Authorization': 'OAuth oauth_consumer_key="PtQ6Alt8ZW4c2Y48sad6cZkKJ",oauth_token="316270387-F1jRV5VeBoWkcz1fTyQCRnxEZErvgsJ2TSrER6cm",oauth_signature_method="HMAC-SHA1",oauth_timestamp="1624575239",oauth_nonce="SkFFAaTShvm",oauth_version="1.0",oauth_signature="YNy3RR6oHdX9vN3zNKs206wSIi8%3D"',
-    'Cookie': 'guest_id=v1%3A162088818648439981; personalization_id="v1_x0G0pyVUfxh6NfBACXkQ7w=="'
-  }
-};
-request(options, function (error, response) {
-  if (error) throw new Error(error);
-  console.log(response.body);
-});
-
-
 
 app.listen(port, () => {
   console.log(`listening at http://localhost:${port} 🤙🏾`)
