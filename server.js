@@ -157,7 +157,7 @@ async function testCall(tweetId) {
   });
 };
 
-testCall('1408182964282957827').then((value) => console.log(JSON.stringify(value.data)));
+testCall('1408182964282957827').then((value) => console.log(JSON.stringify(value)));
 
 app.listen(port, () => {
   console.log(`listening at http://localhost:${port} 🤙🏾`)
