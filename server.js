@@ -129,36 +129,17 @@ function digTweet(authorUserName, tweetId, recipientId) {
   //authorUserName - data.user.screen_name
   //tweetId - data.id_str
   //recipientId - data.user.id
+
   if (tweetId) {
   //search for referenced tweets
     testCall(tweetId).then((value) => {
       if (value && value.data.referenced_tweets) {
-        // console.log(JSON.stringify(value));
-
         var authorUserName = value.includes.users[0].username;
         var tweetId = value.data.referenced_tweets[0].id;
         var recipientId = recipientId;
 
         //call digTweet on referenced tweets
         digTweet(authorUserName, tweetId, recipientId);
-
-        //dm referenced tweet to owner
-        var tweetString = `https://twitter.com/${authorUserName}/status/${tweetId}`;
-        var msg = {
-              event: {
-                type: 'message_create',
-                message_create: {
-                  target: {
-                    recipient_id: recipientId,
-                  },
-                  message_data: {
-                    text: tweetString,
-                  },
-                },
-              },
-            };
-
-        console.log('Tweet>>>>>>>>> ' + tweetString);
         // T.post("direct_messages/events/new", msg)
         //     .catch(err => {
         //       console.error("error", err.stack);
@@ -166,10 +147,26 @@ function digTweet(authorUserName, tweetId, recipientId) {
         //     .then(result => {
         //       console.log(`Message sent successfully To ${recipientId} 💪💪`);
         //     });
-
       }
     });
 
+    //dm referenced tweet to owner
+    var tweetString = `https://twitter.com/${authorUserName}/status/${tweetId}`;
+    var msg = {
+          event: {
+            type: 'message_create',
+            message_create: {
+              target: {
+                recipient_id: recipientId,
+              },
+              message_data: {
+                text: tweetString,
+              },
+            },
+          },
+        };
+
+    console.log('Tweet>>>>>>>>> ' + tweetString);
   }
 }
 
