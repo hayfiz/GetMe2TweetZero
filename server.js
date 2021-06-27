@@ -148,7 +148,7 @@ function digTweet(data, recipient_id) {
       };
 }
 
-const tweetSearchedFor = await client.v2.singleTweet('1408182889578217475', {
+let tweetSearchedFor = await client.v2.singleTweet('1408182889578217475', {
   expansions: [
     'entities.mentions.username',
     'in_reply_to_user_id',
