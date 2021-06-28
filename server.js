@@ -170,8 +170,7 @@ async function digTweet(authorUserName, tweetId, recipientId) {
   }
 
   return new Promise(resolve => resolve(tweetId));
-  });
-}
+  }
 
 async function testCall(tweetId) {
   return tweetSearchedFor = await client.v2.singleTweet(tweetId, {
