@@ -139,7 +139,7 @@ async function digTweet(authorUserName, tweetId, recipientId) {
         var recipientId = recipientId;
 
         //call digTweet on referenced tweets
-        await digTweet(authorUserName, tweetId, recipientId);
+        var p = await digTweet(authorUserName, tweetId, recipientId);
 
         //dm referenced tweet to owner
         var tweetString = `https://twitter.com/${authorUserName}/status/${tweetId}`;
@@ -169,7 +169,7 @@ async function digTweet(authorUserName, tweetId, recipientId) {
     });
   }
 
-  return new Promise(tweetId => console.log('tweet id - '+tweetId);
+  return new Promise(resolve => resolve(tweetId));
   });
 }
 
