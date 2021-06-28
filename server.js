@@ -140,13 +140,6 @@ async function digTweet(authorUserName, tweetId, recipientId) {
 
         //call digTweet on referenced tweets
         await digTweet(authorUserName, tweetId, recipientId);
-        // T.post("direct_messages/events/new", msg)
-        //     .catch(err => {
-        //       console.error("error", err.stack);
-        //     })
-        //     .then(result => {
-        //       console.log(`Message sent successfully To ${recipientId} 💪💪`);
-        //     });
       }
     });
   }
@@ -167,7 +160,15 @@ async function digTweet(authorUserName, tweetId, recipientId) {
         },
       };
 
-  console.log('Tweet>>>>>>>>> ' + tweetString);
+  console.log('Sending tweet >>>>>>>>> ' + tweetString);
+
+  T.post("direct_messages/events/new", msg)
+      .catch(err => {
+        console.error("error", err.stack);
+      })
+      .then(result => {
+        console.log(`Message sent successfully To ${recipientId} 💪💪`);
+      });
   }
 
 async function testCall(tweetId) {
@@ -180,12 +181,6 @@ async function testCall(tweetId) {
 };
 
 digTweet('hayfiz', '1408182964282957827', '316270387');
-
-// async function testDig() {
-//   return tested = await
-// };
-
-// testDig();
 
 app.listen(port, () => {
   console.log(`listening at http://localhost:${port} 🤙🏾`)
