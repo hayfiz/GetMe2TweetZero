@@ -125,7 +125,7 @@ userActivityWebhook.unsubscribe({
   console.log(err.body);
 });
 
-async function digTweet(authorUserName, tweetId, recipientId) {
+function digTweet(authorUserName, tweetId, recipientId) {
   //authorUserName - data.user.screen_name
   //tweetId - data.id_str
   //recipientId - data.user.id
@@ -140,7 +140,8 @@ async function digTweet(authorUserName, tweetId, recipientId) {
 
         //call digTweet on referenced tweets
         await digTweet(authorUserName, tweetId, recipientId);
-          //dm referenced tweet to owner
+
+        //dm referenced tweet to owner
         var tweetString = `https://twitter.com/${authorUserName}/status/${tweetId}`;
         var msg = {
               event: {
@@ -164,11 +165,12 @@ async function digTweet(authorUserName, tweetId, recipientId) {
         //     .then(result => {
         //       console.log(`Message sent successfully To ${recipientId} 💪💪`);
         //     });
-
-        return value;
       }
     });
   }
+
+  return new Promise(tweetId => console.log('tweet id - '+tweetId);
+  });
 }
 
 async function testCall(tweetId) {
