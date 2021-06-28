@@ -84,7 +84,7 @@ userActivityWebhook.unsubscribe({
         .on('favorite', (data) => console.log (JSON.stringify(data) + ' - favorite'))
         .on ('tweet_create', (data) => {
             console.log (JSON.stringify(data) + ' - tweet_create')
-            digTweet(data.user.screen_name, data.id_str, data.user.id);
+            digTweet(data.user.screen_name, data.in_reply_to_status_id_str, data.user.id);
             })
             .on ('follow', (data) => console.log (JSON.stringify(data) + ' - follow'))
             .on ('mute', (data) => console.log (JSON.stringify(data) + ' - mute'))
