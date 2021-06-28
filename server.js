@@ -185,7 +185,7 @@ digTweet('hayfiz', '1408182964282957827', '316270387');
 //   return tested = await
 // };
 
-testDig();
+// testDig();
 
 app.listen(port, () => {
   console.log(`listening at http://localhost:${port} 🤙🏾`)
