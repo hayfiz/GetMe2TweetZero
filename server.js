@@ -132,7 +132,7 @@ async function digTweet(authorUserName, tweetId, recipientId) {
 
   if (tweetId) {
   //search for referenced tweets
-    testCall(tweetId).then((value) => {
+    testCall(tweetId).then(async(value) => {
       if (value && value.data.referenced_tweets) {
         var authorUserName = value.includes.users[0].username;
         var tweetId = value.data.referenced_tweets[0].id;
