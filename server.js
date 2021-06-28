@@ -83,28 +83,8 @@ userActivityWebhook.unsubscribe({
         userActivity
         .on('favorite', (data) => console.log (JSON.stringify(data) + ' - favorite'))
         .on ('tweet_create', (data) => {
-          console.log (JSON.stringify(data) + ' - tweet_create')
-          var obj = {
-                event: {
-                  type: 'message_create',
-                  message_create: {
-                    target: {
-                      recipient_id: data.user.id,
-                    },
-                    message_data: {
-                      text: `🤖: Thanks for reaching out ${data.user.name}. Hayford will get back to you ASAP`,
-                    },
-                  },
-                },
-              };
-
-          T.post("direct_messages/events/new", obj)
-              .catch(err => {
-                console.error("error", err.stack);
-              })
-              .then(result => {
-                console.log(`Message sent successfully To ${data.user.screen_name} 💪💪`);
-              });
+            console.log (JSON.stringify(data) + ' - tweet_create')
+            digTweet(data.user.screen_name, data.id_str, data.user.id);
             })
             .on ('follow', (data) => console.log (JSON.stringify(data) + ' - follow'))
             .on ('mute', (data) => console.log (JSON.stringify(data) + ' - mute'))
@@ -179,7 +159,7 @@ async function testCall(tweetId) {
   });
 };
 
-digTweet('hayfiz', '1408182964282957827', '316270387');
+// digTweet('hayfiz', '1408182964282957827', '316270387');
 
 app.listen(port, () => {
   console.log(`listening at http://localhost:${port} 🤙🏾`)
