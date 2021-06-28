@@ -179,9 +179,11 @@ async function testCall(tweetId) {
   });
 };
 
-async function testDig() {
-  return tested = await digTweet('hayfiz', '1408182964282957827', '316270387');
-};
+digTweet('hayfiz', '1408182964282957827', '316270387');
+
+// async function testDig() {
+//   return tested = await
+// };
 
 testDig();
 
