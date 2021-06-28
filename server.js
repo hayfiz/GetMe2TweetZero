@@ -132,32 +132,14 @@ async function digTweet(authorUserName, tweetId, recipientId) {
 
   if (tweetId) {
   //search for referenced tweets
-    testCall(tweetId).then(async(value) => {
+    await testCall(tweetId).then(async(value) => {
       if (value && value.data.referenced_tweets) {
         var authorUserName = value.includes.users[0].username;
         var tweetId = value.data.referenced_tweets[0].id;
         var recipientId = recipientId;
 
         //call digTweet on referenced tweets
-        var p = await digTweet(authorUserName, tweetId, recipientId);
-
-        //dm referenced tweet to owner
-        var tweetString = `https://twitter.com/${authorUserName}/status/${tweetId}`;
-        var msg = {
-              event: {
-                type: 'message_create',
-                message_create: {
-                  target: {
-                    recipient_id: recipientId,
-                  },
-                  message_data: {
-                    text: tweetString,
-                  },
-                },
-              },
-            };
-
-        console.log('Tweet>>>>>>>>> ' + tweetString);
+        await digTweet(authorUserName, tweetId, recipientId);
         // T.post("direct_messages/events/new", msg)
         //     .catch(err => {
         //       console.error("error", err.stack);
@@ -169,7 +151,23 @@ async function digTweet(authorUserName, tweetId, recipientId) {
     });
   }
 
-  return new Promise(resolve => resolve(tweetId));
+  //dm referenced tweet to owner
+  var tweetString = `https://twitter.com/${authorUserName}/status/${tweetId}`;
+  var msg = {
+        event: {
+          type: 'message_create',
+          message_create: {
+            target: {
+              recipient_id: recipientId,
+            },
+            message_data: {
+              text: tweetString,
+            },
+          },
+        },
+      };
+
+  console.log('Tweet>>>>>>>>> ' + tweetString);
   }
 
 async function testCall(tweetId) {
