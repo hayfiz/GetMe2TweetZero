@@ -163,13 +163,13 @@ async function digTweet(authorUserName, tweetId, recipientId) {
 
       console.log('Sending tweet >>>>>>>>> ' + tweetString);
 
-      await T.post("direct_messages/events/new", msg)
-          .catch(err => {
-            console.error("error", err.stack);
-          })
-          .then(result => {
-            console.log(`Message sent successfully To ${recipientId} 💪💪`);
-          });
+      // T.post("direct_messages/events/new", msg)
+      //     .catch(err => {
+      //       console.error("error", err.stack);
+      //     })
+      //     .then(result => {
+      //       console.log(`Message sent successfully To ${recipientId} 💪💪`);
+      //     });
 
       }
   }
