@@ -125,7 +125,7 @@ userActivityWebhook.unsubscribe({
   console.log(err.body);
 });
 
-function digTweet(authorUserName, tweetId, recipientId) {
+async function digTweet(authorUserName, tweetId, recipientId) {
   //authorUserName - data.user.screen_name
   //tweetId - data.id_str
   //recipientId - data.user.id
@@ -182,7 +182,11 @@ async function testCall(tweetId) {
   });
 };
 
-digTweet('hayfiz', '1408182964282957827', '316270387');
+async function testDig() {
+  return tested = await digTweet('hayfiz', '1408182964282957827', '316270387');
+};
+
+testDig();
 
 app.listen(port, () => {
   console.log(`listening at http://localhost:${port} 🤙🏾`)
