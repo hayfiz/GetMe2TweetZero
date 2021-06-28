@@ -136,7 +136,6 @@ async function digTweet(authorUserName, tweetId, recipientId) {
       if (value && value.data.referenced_tweets) {
         var authorUserName = value.includes.users[0].username;
         var tweetId = value.data.referenced_tweets[0].id;
-        var recipientId = recipientId;
 
         //call digTweet on referenced tweets
         await digTweet(authorUserName, tweetId, recipientId);
