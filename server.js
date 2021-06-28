@@ -145,33 +145,30 @@ async function digTweet(authorUserName, tweetId, recipientId) {
   }
 
   //dm referenced tweet to owner
-  if (recipientId) {
-      var tweetString = `https://twitter.com/${authorUserName}/status/${tweetId}`;
-      var msg = {
-            event: {
-              type: 'message_create',
-              message_create: {
-                target: {
-                  recipient_id: recipientId,
-                },
-                message_data: {
-                  text: tweetString,
-                },
-              },
+  var tweetString = `https://twitter.com/${authorUserName}/status/${tweetId}`;
+  var msg = {
+        event: {
+          type: 'message_create',
+          message_create: {
+            target: {
+              recipient_id: recipientId,
             },
-          };
+            message_data: {
+              text: tweetString,
+            },
+          },
+        },
+      };
 
-      console.log('Sending tweet >>>>>>>>> ' + tweetString);
+  console.log('Sending tweet >>>>>>>>> ' + tweetString);
 
-      // T.post("direct_messages/events/new", msg)
-      //     .catch(err => {
-      //       console.error("error", err.stack);
-      //     })
-      //     .then(result => {
-      //       console.log(`Message sent successfully To ${recipientId} 💪💪`);
-      //     });
-
-      }
+  T.post("direct_messages/events/new", msg)
+      .catch(err => {
+        console.error("error", err.stack);
+      })
+      .then(result => {
+        console.log(`Message sent successfully To ${recipientId} 💪💪`);
+      });
   }
 
 async function testCall(tweetId) {
