@@ -82,9 +82,10 @@ userActivityWebhook.unsubscribe({
     .then(function (userActivity) {
         userActivity
         .on ('tweet_create', (data) => {
-              console.log (JSON.stringify(data) + ' - tweet_create')
               if (data.in_reply_to_status_id) {
                 digTweet(data.user.screen_name, data.in_reply_to_status_id_str, data.user.id);
+              } else {
+                console.log(`${data.id_str}: A tweet was created but it's being ignored since it is not a mention`);
               }
             })
           })
