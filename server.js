@@ -11,17 +11,6 @@ app.use(bodyParser.json());
 
 const port = process.env.PORT || 3000
 
-var Twit = require('twit')
-
-var T = new Twit({
-  consumer_key:         process.env.TWITTER_CONSUMER_KEY,
-  consumer_secret:      process.env.TWITTER_CONSUMER_SECRET,
-  access_token:         process.env.TWITTER_ACCESS_KEY,
-  access_token_secret:  process.env.TWITTER_ACCESS_TOKEN_SECRET,
-  timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
-  strictSSL:            true,     // optional - requires SSL certificates to be valid.
-})
-
 // OAuth 1.0a (User context)
 const client = new TwitterApi({
   appKey: process.env.TWITTER_CONSUMER_KEY,
@@ -44,6 +33,17 @@ const userActivityWebhook = twitterWebhooks.userActivity({
     appBearerToken: 'AAAAAAAAAAAAAAAAAAAAAM%2FsPQEAAAAAYa16T%2BFIkXX9fdO9xYdUBVX1wi8%3DY2ialfV498fCONhbWsTW4bo4gaWuJnkL7eZq5CRpjfOFhWVmS5', //// TODO: Move bearer token to env variable
     app
 });
+
+var Twit = require('twit')
+
+var T = new Twit({
+  consumer_key:         process.env.TWITTER_CONSUMER_KEY,
+  consumer_secret:      process.env.TWITTER_CONSUMER_SECRET,
+  access_token:         process.env.TWITTER_ACCESS_KEY,
+  access_token_secret:  process.env.TWITTER_ACCESS_TOKEN_SECRET,
+  timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
+  strictSSL:            true,     // optional - requires SSL certificates to be valid.
+})
 
 //// TODO:  Combine methods below to register webhook if none is registered
 /**
@@ -81,18 +81,12 @@ userActivityWebhook.unsubscribe({
     })
     .then(function (userActivity) {
         userActivity
-        .on('favorite', (data) => console.log (JSON.stringify(data) + ' - favorite'))
         .on ('tweet_create', (data) => {
-            console.log (JSON.stringify(data) + ' - tweet_create')
-            digTweet(data.user.screen_name, data.in_reply_to_status_id_str, data.user.id);
+              console.log (JSON.stringify(data) + ' - tweet_create')
+              if (data.in_reply_to_status_id) {
+                digTweet(data.user.screen_name, data.in_reply_to_status_id_str, data.user.id);
+              }
             })
-            .on ('follow', (data) => console.log (JSON.stringify(data) + ' - follow'))
-            .on ('mute', (data) => console.log (JSON.stringify(data) + ' - mute'))
-            .on ('revoke', (data) => console.log (JSON.stringify(data) + ' - revoke'))
-            .on ('direct_message', (data) => console.log (JSON.stringify(data) + ' - direct_message'))
-            .on ('direct_message_indicate_typing', (data) => console.log (JSON.stringify(data) + ' - direct_message_indicate_typing'))
-            .on ('direct_message_mark_read', (data) => console.log (JSON.stringify(data) + ' - direct_message_mark_read'))
-            .on ('tweet_delete', (data) => console.log (JSON.stringify(data) + ' - tweet_delete'))
           })
           .then(function (ret) {
             console.log('Successfully subscribed to user activity ✅');
@@ -105,14 +99,16 @@ userActivityWebhook.unsubscribe({
   console.log(err.body);
 });
 
+/*
+  Variable name - Tweet object field
+  authorUserName - data.user.screen_name
+  tweetId - data.in_reply_to_status_id_str
+  recipientId - data.user.id
+*/
 async function digTweet(authorUserName, tweetId, recipientId) {
-  //authorUserName - data.user.screen_name
-  //tweetId - data.id_str
-  //recipientId - data.user.id
-
   if (tweetId) {
   //search for referenced tweets
-    await testCall(tweetId).then(async(value) => {
+    await searchForTweet(tweetId).then(async(value) => {
       if (value && value.data.referenced_tweets) {
         var authorUserName = value.includes.users[0].username;
         var tweetId = value.data.referenced_tweets[0].id;
@@ -124,6 +120,19 @@ async function digTweet(authorUserName, tweetId, recipientId) {
   }
 
   //dm referenced tweet to owner
+  sendTweetToRequestor(authorUserName, tweetId, recipientId);
+}
+
+async function searchForTweet(tweetId) {
+  return tweetSearchedFor = await client.v2.singleTweet(tweetId, {
+    'expansions': [
+      'referenced_tweets.id.author_id'
+    ],
+    'tweet.fields': ['referenced_tweets']
+  });
+};
+
+function sendTweetToRequestor(authorUserName, tweetId, recipientId) {
   var tweetString = `https://twitter.com/${authorUserName}/status/${tweetId}`;
   var msg = {
         event: {
@@ -142,24 +151,13 @@ async function digTweet(authorUserName, tweetId, recipientId) {
   console.log('Sending tweet >>>>>>>>> ' + tweetString);
 
   T.post("direct_messages/events/new", msg)
-      .catch(err => {
-        console.error("error", err.stack);
-      })
-      .then(result => {
-        console.log(`Message sent successfully To ${recipientId} 💪💪`);
-      });
-  }
-
-async function testCall(tweetId) {
-  return tweetSearchedFor = await client.v2.singleTweet(tweetId, {
-    'expansions': [
-      'referenced_tweets.id.author_id'
-    ],
-    'tweet.fields': ['referenced_tweets']
-  });
-};
-
-// digTweet('hayfiz', '1408182964282957827', '316270387');
+    .catch(err => {
+      console.error("error", err.stack);
+    })
+    .then(result => {
+      console.log(`Message sent successfully To ${recipientId} 💪💪`);
+    });
+}
 
 app.listen(port, () => {
   console.log(`listening at http://localhost:${port} 🤙🏾`)
