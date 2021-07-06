@@ -65,40 +65,43 @@ userActivityWebhook.register().catch(err => {
 //   console.log(err.body);
 // });
 
-// Unsubscribe for a particular user activity
-userActivityWebhook.unsubscribe({
-    userId: '316270387',
-    accessToken: process.env.TWITTER_ACCESS_KEY,
-    accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
-})
-.then(function (ret) {
-    console.log('Removed previous subscription for user activity ❌')
-    // Subscribe for a particular user activity
-    userActivityWebhook.subscribe({
-        userId: '316270387',
-        accessToken: process.env.TWITTER_ACCESS_KEY,
-        accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
-    })
-    .then(function (userActivity) {
-        userActivity
-        .on ('tweet_create', (data) => {
-              if (data.in_reply_to_status_id) {
-                digTweet(data.user.screen_name, data.in_reply_to_status_id_str, data.user.id);
-              } else {
-                console.log(`${data.id_str}: A tweet was created but it's being ignored since it is not a mention`);
-              }
+if (process.env.TWITTER_BOT_ACTIVE === "Y") {
+  // Unsubscribe for a particular user activity
+  userActivityWebhook.unsubscribe({
+      userId: '316270387',
+      accessToken: process.env.TWITTER_ACCESS_KEY,
+      accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+  })
+  .then(function (ret) {
+      console.log('Removed previous subscription for user activity ❌')
+      // Subscribe for a particular user activity
+      userActivityWebhook.subscribe({
+          userId: '316270387',
+          accessToken: process.env.TWITTER_ACCESS_KEY,
+          accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+      })
+      .then(function (userActivity) {
+          userActivity
+          .on ('tweet_create', (data) => {
+                if (data.in_reply_to_status_id) {
+                  digTweet(data.user.screen_name, data.in_reply_to_status_id_str, data.user.id);
+                } else {
+                  console.log(`${data.id_str}: A tweet was created but it's being ignored since it is not a mention`);
+                }
+              })
             })
-          })
-          .then(function (ret) {
-            console.log('Successfully subscribed to user activity ✅');
-          }).catch(err => {
-            console.log('err on subscribe 🤮');
-            console.log(err.body);
-          });
-}).catch(err => {
-  console.log('err on unsubscribe 🤮');
-  console.log(err.body);
-});
+            .then(function (ret) {
+              console.log('Successfully subscribed to user activity ✅');
+            }).catch(err => {
+              console.log('err on subscribe 🤮');
+              console.log(err.body);
+            });
+  }).catch(err => {
+    console.log('err on unsubscribe 🤮');
+    console.log(err.body);
+  });
+
+}
 
 /*
   Variable name - Tweet object field
