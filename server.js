@@ -46,21 +46,21 @@ const T = new Twit({
 
 
 // Register your webhook url - just needed once per URL
-userActivityWebhook.register().catch((err) => {
-  console.log('err on register');
-  console.log(err);
-});;
-
-
+// userActivityWebhook.register().then(() => {
+//   console.log('Webhook registered ok 🤙🏾')
+// }).catch((err) => {
+//   console.log('err on register');
+//   console.log(err);
+// });
 
 // Get webhook info
-// userActivityWebhook.getWebhook()
-// .then(function (ret) {
-//     console.log('webhook info: ' + JSON.stringify(ret[0]));
-// }).catch(err => {
-//   console.log('err on getWebhooks');
-//   console.log(err.body);
-// });
+userActivityWebhook.getWebhook()
+.then((ret) => {
+    console.log(`webhook info: ${JSON.stringify(ret[0])}`);
+}).catch((err) => {
+    console.log('err on getWebhooks');
+    console.log(err.body);
+});
 
 if (process.env.TWITTER_BOT_ACTIVE === 'Y') {
   // Unsubscribe for a particular user activity
