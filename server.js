@@ -26,7 +26,7 @@ const userActivityWebhook = twitterWebhooks.userActivity({
   consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
   accessToken: process.env.TWITTER_ACCESS_KEY,
   accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
-  environment: 'Development', // default : 'env-beta'
+  environment: 'development', // default : 'env-beta'
   appBearerToken:
   process.env.TWITTER_APP_BEARER_TOKEN, /// / TODO: Move bearer token to env variable
   app
