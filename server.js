@@ -102,8 +102,8 @@ if (process.env.TWITTER_BOT_ACTIVE === 'Y') {
         });
     }).catch((err) => {
       console.log('err on getWebhooks');
-      console.log(err.body);
-      if (err.body.code === 34) { // webhook does not exist previously
+      console.log(err.body.errors[0]);
+      if (err.body.errors[0].code === 34) { // webhook does not exist previously
         console.log('No previous webhook. Attempting to subscribe to user activity 💬');
         // Subscribe for a particular user activity
         userActivityWebhook.subscribe({
