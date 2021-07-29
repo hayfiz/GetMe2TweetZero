@@ -58,51 +58,77 @@ if (process.env.REGISTER_TWITTER_WEBHOOK === 'Y') {
 }
 
 // Get webhook info
-// userActivityWebhook.getWebhook()
-// .then((ret) => {
-//     console.log(`webhook info: ${JSON.stringify(ret[0])}`);
-// }).catch((err) => {
-//     console.log('err on getWebhooks');
-//     console.log(err.body);
-// });
 
 if (process.env.TWITTER_BOT_ACTIVE === 'Y') {
   console.log('Attempting to unsubscribe for user activity in order to resubscribe');
   // Unsubscribe for a particular user activity
-  userActivityWebhook.unsubscribe({
-    userId: process.env.TWITTER_USER_ID_TO_REGISTER_FOR_ACTIVITY,
-    accessToken: process.env.TWITTER_ACCESS_KEY,
-    accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
-  })
-    .then(() => {
-      console.log('Removed previous subscription for user activity ❌')
-      // Subscribe for a particular user activity
-      userActivityWebhook.subscribe({
+  userActivityWebhook.getWebhook()
+    .then((ret) => {
+      console.log(`webhook info: ${JSON.stringify(ret[0])}`);
+
+      userActivityWebhook.unsubscribe({
         userId: process.env.TWITTER_USER_ID_TO_REGISTER_FOR_ACTIVITY,
         accessToken: process.env.TWITTER_ACCESS_KEY,
         accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
       })
-        .then((userActivity) => {
-          userActivity
-            .on ('tweet_create', (data) => {
-              if (data.in_reply_to_status_id) {
-                digTweet(data.user.screen_name, data.in_reply_to_status_id_str, data.user.id);
-              } else {
-                console.log(`${data.id_str}: A tweet was created but it's being ignored since it is not a mention`);
-              }
-            })
-        })
         .then(() => {
-          console.log('Successfully subscribed to user activity ✅');
+          console.log('Removed previous subscription for user activity ❌');
+          console.log('Attempting to subscribe to user activity 💬');
+          // Subscribe for a particular user activity
+          userActivityWebhook.subscribe({
+            userId: process.env.TWITTER_USER_ID_TO_REGISTER_FOR_ACTIVITY,
+            accessToken: process.env.TWITTER_ACCESS_KEY,
+            accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+          })
+            .then((userActivity) => {
+              userActivity
+                .on ('tweet_create', (data) => {
+                  if (data.in_reply_to_status_id) {
+                    digTweet(data.user.screen_name, data.in_reply_to_status_id_str, data.user.id);
+                  } else {
+                    console.log(`${data.id_str}: A tweet was created but it's being ignored since it is not a mention`);
+                  }
+                })
+            })
+            .then(() => {
+              console.log('Successfully subscribed to user activity ✅');
+            }).catch((err) => {
+              console.log('err on subscribe 🤮');
+              console.log(err.body);
+            });
         }).catch((err) => {
-          console.log('err on subscribe 🤮');
+          console.log('err on unsubscribe 🤮');
           console.log(err.body);
         });
     }).catch((err) => {
-      console.log('err on unsubscribe 🤮');
+      console.log('err on getWebhooks');
       console.log(err.body);
+      if (err.body.code === 34) { // webhook does not exist previously
+        console.log('No previous webhook. Attempting to subscribe to user activity 💬');
+        // Subscribe for a particular user activity
+        userActivityWebhook.subscribe({
+          userId: process.env.TWITTER_USER_ID_TO_REGISTER_FOR_ACTIVITY,
+          accessToken: process.env.TWITTER_ACCESS_KEY,
+          accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+        })
+          .then((userActivity) => {
+            userActivity
+              .on ('tweet_create', (data) => {
+                if (data.in_reply_to_status_id) {
+                  digTweet(data.user.screen_name, data.in_reply_to_status_id_str, data.user.id);
+                } else {
+                  console.log(`${data.id_str}: A tweet was created but it's being ignored since it is not a mention`);
+                }
+              })
+          })
+          .then(() => {
+            console.log('Successfully subscribed to user activity ✅');
+          }).catch((err) => {
+            console.log('err on subscribe 🤮');
+            console.log(err.body);
+          });
+      }
     });
-
 }
 
 /*
