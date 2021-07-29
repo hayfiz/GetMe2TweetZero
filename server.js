@@ -26,8 +26,9 @@ const userActivityWebhook = twitterWebhooks.userActivity({
   consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
   accessToken: process.env.TWITTER_ACCESS_KEY,
   accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
-  environment: 'development', // default : 'env-beta'
-  appBearerToken: 'AAAAAAAAAAAAAAAAAAAAAM%2FsPQEAAAAAYa16T%2BFIkXX9fdO9xYdUBVX1wi8%3DY2ialfV498fCONhbWsTW4bo4gaWuJnkL7eZq5CRpjfOFhWVmS5', /// / TODO: Move bearer token to env variable
+  environment: 'Development', // default : 'env-beta'
+  appBearerToken:
+  process.env.TWITTER_APP_BEARER_TOKEN, /// / TODO: Move bearer token to env variable
   app
 });
 
@@ -46,26 +47,30 @@ const T = new Twit({
 
 
 // Register your webhook url - just needed once per URL
-// userActivityWebhook.register().then(() => {
-//   console.log('Webhook registered ok 🤙🏾')
-// }).catch((err) => {
-//   console.log('err on register');
-//   console.log(err);
-// });
+if (process.env.REGISTER_TWITTER_WEBHOOK === 'Y') {
+  console.log('Attempting to register webhook');
+  userActivityWebhook.register().then(() => {
+    console.log('Webhook registered ok 🤙🏾')
+  }).catch((err) => {
+    console.log('err on register');
+    console.log(err);
+  });
+}
 
 // Get webhook info
-userActivityWebhook.getWebhook()
-.then((ret) => {
-    console.log(`webhook info: ${JSON.stringify(ret[0])}`);
-}).catch((err) => {
-    console.log('err on getWebhooks');
-    console.log(err.body);
-});
+// userActivityWebhook.getWebhook()
+// .then((ret) => {
+//     console.log(`webhook info: ${JSON.stringify(ret[0])}`);
+// }).catch((err) => {
+//     console.log('err on getWebhooks');
+//     console.log(err.body);
+// });
 
 if (process.env.TWITTER_BOT_ACTIVE === 'Y') {
+  console.log('Attempting to unsubscribe for user activity in order to resubscribe');
   // Unsubscribe for a particular user activity
   userActivityWebhook.unsubscribe({
-    userId: '316270387',
+    userId: process.env.TWITTER_USER_ID_TO_REGISTER_FOR_ACTIVITY,
     accessToken: process.env.TWITTER_ACCESS_KEY,
     accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
   })
@@ -73,7 +78,7 @@ if (process.env.TWITTER_BOT_ACTIVE === 'Y') {
       console.log('Removed previous subscription for user activity ❌')
       // Subscribe for a particular user activity
       userActivityWebhook.subscribe({
-        userId: '316270387',
+        userId: process.env.TWITTER_USER_ID_TO_REGISTER_FOR_ACTIVITY,
         accessToken: process.env.TWITTER_ACCESS_KEY,
         accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
       })
