@@ -20,7 +20,7 @@ const client = new TwitterApi({
 });
 
 const userActivityWebhook = twitterWebhooks.userActivity({
-  serverUrl: 'https://whats-down-this-hole.herokuapp.com/',
+  serverUrl: 'https://whats-down-this-hole.herokuapp.com/test/',
   route: '/', // default : '/'
   consumerKey: process.env.TWITTER_CONSUMER_KEY,
   consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
