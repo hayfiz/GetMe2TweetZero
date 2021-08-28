@@ -83,13 +83,6 @@ function sendTweetToRequestor(authorUserName, tweetId, recipientId) {
   };
 
   tweetsToSend[recipientId].push(msg);
-  // T.post('direct_messages/events/new', msg)
-  //   .catch((err) => {
-  //     console.error('error', err.stack);
-  //   })
-  //   .then(() => {
-  //     console.log(`${tweetString} sent successfully To ${recipientId} 💪💪`);
-  //   });
 }
 
 function digTweet(authorUserName, tweetId, recipientId) {
@@ -104,6 +97,15 @@ function digTweet(authorUserName, tweetId, recipientId) {
         digTweet(dugTweetAuthorUserName, dugTweetReferencedTweetId, recipientId);
       } else {
         tweetsToSend[recipientId].reverse();
+        tweetsToSend[recipientId].forEach((msg, i) => {
+          T.post('direct_messages/events/new', msg)
+            .catch((err) => {
+              console.error('error', err.stack);
+            })
+            .then(() => {
+              console.log(`${msg.event.message_data.text} sent successfully To ${recipientId} 💪💪`);
+            });
+        });
         console.log(JSON.stringify(tweetsToSend[recipientId]));
       }
     });
