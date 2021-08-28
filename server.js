@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const express = require('express');
 const bodyParser = require('body-parser');
 const twitterWebhooks = require('twitter-webhooks');
@@ -129,8 +130,8 @@ async function digTweet(authorUserName, tweetId, recipientId) {
     });
   }
 
-  //dm referenced tweet to owner
-  sendTweetToRequestor(authorUserName, tweetId, recipientId);
+  // dm referenced tweet to owner
+  _.debounce(sendTweetToRequestor(authorUserName, tweetId, recipientId), 1000);
 }
 
 async function searchForTweet(tweetId) {
@@ -160,13 +161,13 @@ function sendTweetToRequestor(authorUserName, tweetId, recipientId) {
 
   console.log(`Sending tweet >>>>>>>>> ${tweetString}`);
 
-  // T.post('direct_messages/events/new', msg)
-  //   .catch(err => {
-  //     console.error('error', err.stack);
-  //   })
-  //   .then(result => {
-  //     console.log(`Message sent successfully To ${recipientId} 💪💪`);
-  //   });
+  T.post('direct_messages/events/new', msg)
+    .catch(err => {
+      console.error('error', err.stack);
+    })
+    .then(result => {
+      console.log(`Message sent successfully To ${recipientId} 💪💪`);
+    });
 }
 
 app.listen(port, () => {
