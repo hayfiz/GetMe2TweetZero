@@ -103,6 +103,7 @@ function digTweet(authorUserName, tweetId, recipientId) {
         // call digTweet on referenced tweets
         digTweet(dugTweetAuthorUserName, dugTweetReferencedTweetId, recipientId);
       } else {
+        tweetsToSend[recipientId].reverse();
         console.log(JSON.stringify(tweetsToSend[recipientId]));
       }
     });
