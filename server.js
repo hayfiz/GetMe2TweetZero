@@ -28,7 +28,7 @@ const userActivityWebhook = twitterWebhooks.userActivity({
   accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
   environment: process.env.TWITTER_ENVIRONMENT, // default : 'env-beta'
   appBearerToken:
-  process.env.TWITTER_APP_BEARER_TOKEN, /// / TODO: Move bearer token to env variable
+  process.env.TWITTER_APP_BEARER_TOKEN,
   app
 });
 
@@ -63,6 +63,7 @@ function subscribeToUserActivity() {
     .then((userActivity) => {
       userActivity
         .on('tweet_create', (data) => {
+          console.log(JSON.stringify(data));
           if (data.in_reply_to_status_id) {
             digTweet(data.user.screen_name, data.in_reply_to_status_id_str, data.user.id);
           } else {
@@ -80,29 +81,28 @@ function subscribeToUserActivity() {
 
 if (process.env.TWITTER_BOT_ACTIVE === 'Y') {
   console.log('Attempting to unsubscribe for user activity in order to resubscribe');
-  // Unsubscribe for a particular user activity
+  userActivityWebhook.unsubscribe({
+    userId: process.env.TWITTER_USER_ID_TO_REGISTER_FOR_ACTIVITY,
+    accessToken: process.env.TWITTER_ACCESS_KEY,
+    accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+  }).then(() => {
+    console.log('Successfully removed previous subscription for user activity ❌. Attempting to subscribe to user activity 💬');
+    subscribeToUserActivity();
+  }).catch((err) => {
+    if (err.body.errors[0].code === 34) { // No existing subscription for user activity
+      console.log('No previous webhook. Attempting to subscribe to user activity 💬');
+      // Subscribe for a particular user activity
+      subscribeToUserActivity();
+    } else {
+      console.log(`err on unsubscribe 🤮. Info: ${err.body}`);
+    }
+  });
+}
+
+if (process.env.GET_TWITTER_WEBHOOK_INFO === 'Y') {
   userActivityWebhook.getWebhook()
     .then((ret) => {
       console.log(`webhook info: ${JSON.stringify(ret[0])}`);
-
-      userActivityWebhook.unsubscribe({
-        userId: process.env.TWITTER_USER_ID_TO_REGISTER_FOR_ACTIVITY,
-        accessToken: process.env.TWITTER_ACCESS_KEY,
-        accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
-      })
-        .then(() => {
-          console.log('Removed previous subscription for user activity ❌');
-          console.log('Attempting to subscribe to user activity 💬');
-          // Subscribe for a particular user activity
-          subscribeToUserActivity();
-        }).catch((err) => {
-          console.log(`err on unsubscribe 🤮. Info: ${err.body}`);
-          if (err.body.errors[0].code === 34) { // webhook does not exist previously
-            console.log('No previous webhook. Attempting to subscribe to user activity 💬');
-            // Subscribe for a particular user activity
-            subscribeToUserActivity();
-          }
-        });
     }).catch((err) => {
       console.log('err on getWebhooks');
       console.log(err.body);
@@ -118,7 +118,7 @@ if (process.env.TWITTER_BOT_ACTIVE === 'Y') {
 async function digTweet(authorUserName, tweetId, recipientId) {
   if (tweetId) {
   // search for referenced tweets
-    await searchForTweet(tweetId).then(async(value) => {
+    await searchForTweet(tweetId).then(async (value) => {
       if (value && value.data.referenced_tweets) {
         var authorUserName = value.includes.users[0].username;
         var tweetId = value.data.referenced_tweets[0].id;
