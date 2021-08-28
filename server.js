@@ -107,7 +107,10 @@ function digTweet(authorUserName, tweetId, recipientId) {
         digTweet(dugTweetAuthorUserName, dugTweetReferencedTweetId, recipientId);
       } else {
         tweetsToSend[recipientId].reverse();
-        tweetsToSend[recipientId].forEach((msg, i) => { _.debounce(sendTweet(msg), 500); });
+        for (var i=0; i < tweetsToSend[recipientId].length; i++) {
+          sendTweet(tweetsToSend[recipientId][i]);
+        }
+        // tweetsToSend[recipientId].forEach((msg, i) => { });
         console.log(JSON.stringify(tweetsToSend[recipientId]));
       }
     });
