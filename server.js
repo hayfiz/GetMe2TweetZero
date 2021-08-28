@@ -131,7 +131,7 @@ async function digTweet(authorUserName, tweetId, recipientId) {
   }
 
   // dm referenced tweet to owner
-  _.debounce(sendTweetToRequestor(authorUserName, tweetId, recipientId), 1000);
+  sendTweetToRequestor(authorUserName, tweetId, recipientId);
 }
 
 async function searchForTweet(tweetId) {
