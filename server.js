@@ -55,6 +55,24 @@ if (process.env.REGISTER_TWITTER_WEBHOOK === 'Y') {
   });
 }
 
+async function digTweet(authorUserName, tweetId, recipientId) {
+  if (tweetId) {
+  // search for referenced tweets
+    searchForTweet(tweetId).then((value) => {
+      if (value && value.data.referenced_tweets) {
+        const dugTweetAuthorUserName = value.includes.users[0].username;
+        const dugTweetReferencedTweetId = value.data.referenced_tweets[0].id;
+
+        // call digTweet on referenced tweets
+        digTweet(dugTweetAuthorUserName, dugTweetReferencedTweetId, recipientId);
+      }
+    });
+  }
+
+  // dm referenced tweet to owner
+  sendTweetToRequestor(authorUserName, tweetId, recipientId);
+}
+
 function subscribeToUserActivity() {
   userActivityWebhook.subscribe({
     userId: process.env.TWITTER_USER_ID_TO_REGISTER_FOR_ACTIVITY,
@@ -64,7 +82,6 @@ function subscribeToUserActivity() {
     .then((userActivity) => {
       userActivity
         .on('tweet_create', (data) => {
-          // console.log(JSON.stringify(data));
           if (data.in_reply_to_status_id) {
             digTweet(data.in_reply_to_screen_name, data.in_reply_to_status_id_str, data.user.id);
           } else {
@@ -108,33 +125,6 @@ if (process.env.GET_TWITTER_WEBHOOK_INFO === 'Y') {
       console.log('err on getWebhooks');
       console.log(err.body);
     });
-}
-
-/*
-  Variable name - Tweet object field
-  authorUserName - data.user.screen_name
-  tweetId - data.in_reply_to_status_id_str
-  recipientId - data.user.id
-*/
-async function digTweet(authorUserName, tweetId, recipientId) {
-  if (tweetId) {
-  // search for referenced tweets
-    searchForTweet(tweetId).then(async (value) => {
-      if (value && value.data.referenced_tweets) {
-        var authorUserName = value.includes.users[0].username;
-        var tweetId = value.data.referenced_tweets[0].id;
-
-        // call digTweet on referenced tweets
-        digTweet(authorUserName, tweetId, recipientId).then(() => {
-          sendTweetToRequestor(authorUserName, tweetId, recipientId);
-        });
-      }
-    });
-  } else {
-    // dm referenced tweet to owner
-    sendTweetToRequestor(authorUserName, tweetId, recipientId);
-
-  }
 }
 
 async function searchForTweet(tweetId) {
