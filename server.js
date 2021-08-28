@@ -119,7 +119,7 @@ if (process.env.GET_TWITTER_WEBHOOK_INFO === 'Y') {
 async function digTweet(authorUserName, tweetId, recipientId) {
   if (tweetId) {
   // search for referenced tweets
-    await searchForTweet(tweetId).then(async (value) => {
+    const searchedTweet = await searchForTweet(tweetId).then(async (value) => {
       if (value && value.data.referenced_tweets) {
         var authorUserName = value.includes.users[0].username;
         var tweetId = value.data.referenced_tweets[0].id;
@@ -131,7 +131,9 @@ async function digTweet(authorUserName, tweetId, recipientId) {
   }
 
   // dm referenced tweet to owner
-  sendTweetToRequestor(authorUserName, tweetId, recipientId);
+  if (searchedTweet) {
+    sendTweetToRequestor(authorUserName, tweetId, recipientId);
+  }
 }
 
 async function searchForTweet(tweetId) {
@@ -159,14 +161,12 @@ function sendTweetToRequestor(authorUserName, tweetId, recipientId) {
         },
       };
 
-  console.log(`Sending tweet >>>>>>>>> ${tweetString}`);
-
   T.post('direct_messages/events/new', msg)
-    .catch(err => {
+    .catch((err) => {
       console.error('error', err.stack);
     })
-    .then(result => {
-      console.log(`Message sent successfully To ${recipientId} 💪💪`);
+    .then(() => {
+      console.log(`${tweetString} sent successfully To ${recipientId} 💪💪`);
     });
 }
 
