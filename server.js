@@ -55,7 +55,41 @@ if (process.env.REGISTER_TWITTER_WEBHOOK === 'Y') {
   });
 }
 
-async function digTweet(authorUserName, tweetId, recipientId) {
+async function searchForTweet(tweetId) {
+  return client.v2.singleTweet(tweetId, {
+    'expansions': [
+      'referenced_tweets.id.author_id'
+    ],
+    'tweet.fields': ['referenced_tweets']
+  });
+}
+
+function sendTweetToRequestor(authorUserName, tweetId, recipientId) {
+  const tweetString = `https://twitter.com/${authorUserName}/status/${tweetId}`;
+  const msg = {
+    event: {
+      type: 'message_create',
+      message_create: {
+        target: {
+          recipient_id: recipientId,
+        },
+        message_data: {
+          text: tweetString,
+        },
+      },
+    },
+  };
+
+  T.post('direct_messages/events/new', msg)
+    .catch((err) => {
+      console.error('error', err.stack);
+    })
+    .then(() => {
+      console.log(`${tweetString} sent successfully To ${recipientId} 💪💪`);
+    });
+}
+
+function digTweet(authorUserName, tweetId, recipientId) {
   if (tweetId) {
   // search for referenced tweets
     searchForTweet(tweetId).then((value) => {
@@ -64,15 +98,13 @@ async function digTweet(authorUserName, tweetId, recipientId) {
         const dugTweetReferencedTweetId = value.data.referenced_tweets[0].id;
 
         // call digTweet on referenced tweets
-        digTweet(dugTweetAuthorUserName, dugTweetReferencedTweetId, recipientId).then(() => {
-          sendTweetToRequestor(authorUserName, tweetId, recipientId);
-        });
+        digTweet(dugTweetAuthorUserName, dugTweetReferencedTweetId, recipientId);
       }
     });
   }
 
   // dm referenced tweet to owner
-  // sendTweetToRequestor(authorUserName, tweetId, recipientId);
+  sendTweetToRequestor(authorUserName, tweetId, recipientId);
 }
 
 function subscribeToUserActivity() {
@@ -126,40 +158,6 @@ if (process.env.GET_TWITTER_WEBHOOK_INFO === 'Y') {
     }).catch((err) => {
       console.log('err on getWebhooks');
       console.log(err.body);
-    });
-}
-
-async function searchForTweet(tweetId) {
-  return tweetSearchedFor = await client.v2.singleTweet(tweetId, {
-    'expansions': [
-      'referenced_tweets.id.author_id'
-    ],
-    'tweet.fields': ['referenced_tweets']
-  });
-};
-
-function sendTweetToRequestor(authorUserName, tweetId, recipientId) {
-  const tweetString = `https://twitter.com/${authorUserName}/status/${tweetId}`;
-  const msg = {
-        event: {
-          type: 'message_create',
-          message_create: {
-            target: {
-              recipient_id: recipientId,
-            },
-            message_data: {
-              text: tweetString,
-            },
-          },
-        },
-      };
-
-  T.post('direct_messages/events/new', msg)
-    .catch((err) => {
-      console.error('error', err.stack);
-    })
-    .then(() => {
-      console.log(`${tweetString} sent successfully To ${recipientId} 💪💪`);
     });
 }
 
