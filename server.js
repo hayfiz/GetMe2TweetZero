@@ -128,12 +128,14 @@ async function digTweet(authorUserName, tweetId, recipientId) {
         await digTweet(authorUserName, tweetId, recipientId);
       }
     });
+    if (searchedTweet) {
+      sendTweetToRequestor(authorUserName, tweetId, recipientId);
+    }
+  } else {
+    sendTweetToRequestor(authorUserName, tweetId, recipientId);
   }
 
   // dm referenced tweet to owner
-  if (searchedTweet) {
-    sendTweetToRequestor(authorUserName, tweetId, recipientId);
-  }
 }
 
 async function searchForTweet(tweetId) {
