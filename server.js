@@ -64,13 +64,15 @@ async function digTweet(authorUserName, tweetId, recipientId) {
         const dugTweetReferencedTweetId = value.data.referenced_tweets[0].id;
 
         // call digTweet on referenced tweets
-        digTweet(dugTweetAuthorUserName, dugTweetReferencedTweetId, recipientId);
+        digTweet(dugTweetAuthorUserName, dugTweetReferencedTweetId, recipientId).then(() => {
+          sendTweetToRequestor(authorUserName, tweetId, recipientId);
+        });
       }
     });
   }
 
   // dm referenced tweet to owner
-  sendTweetToRequestor(authorUserName, tweetId, recipientId);
+  // sendTweetToRequestor(authorUserName, tweetId, recipientId);
 }
 
 function subscribeToUserActivity() {
