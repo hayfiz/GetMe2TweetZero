@@ -125,13 +125,16 @@ async function digTweet(authorUserName, tweetId, recipientId) {
         var tweetId = value.data.referenced_tweets[0].id;
 
         // call digTweet on referenced tweets
-        digTweet(authorUserName, tweetId, recipientId);
+        digTweet(authorUserName, tweetId, recipientId).then(() => {
+          sendTweetToRequestor(authorUserName, tweetId, recipientId);
+        });
       }
     });
-  }
+  } else {
+    // dm referenced tweet to owner
+    sendTweetToRequestor(authorUserName, tweetId, recipientId);
 
-  // dm referenced tweet to owner
-  sendTweetToRequestor(authorUserName, tweetId, recipientId);
+  }
 }
 
 async function searchForTweet(tweetId) {
