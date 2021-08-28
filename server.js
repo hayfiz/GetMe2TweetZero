@@ -30,7 +30,7 @@ const userActivityWebhook = twitterWebhooks.userActivity({
   environment: process.env.TWITTER_ENVIRONMENT, // default : 'env-beta'
   appBearerToken:
   process.env.TWITTER_APP_BEARER_TOKEN,
-  app,
+  app
 });
 
 const Twit = require('twit')
@@ -42,9 +42,7 @@ const T = new Twit({
   access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
   timeout_ms: 60 * 1000, // optional HTTP request timeout to apply to all requests.
   strictSSL: true, // optional - requires SSL certificates to be valid.
-});
-
-const tweetsToSend = {};
+})
 
 // Register your webhook url - just needed once per URL
 if (process.env.REGISTER_TWITTER_WEBHOOK === 'Y') {
@@ -57,7 +55,7 @@ if (process.env.REGISTER_TWITTER_WEBHOOK === 'Y') {
   });
 }
 
-async function searchForTweet(tweetId) {
+function searchForTweet(tweetId) {
   return client.v2.singleTweet(tweetId, {
     'expansions': [
       'referenced_tweets.id.author_id'
@@ -82,7 +80,13 @@ function sendTweetToRequestor(authorUserName, tweetId, recipientId) {
     },
   };
 
-  tweetsToSend[recipientId].push(msg);
+  T.post('direct_messages/events/new', msg)
+    .catch((err) => {
+      console.error('error', err.stack);
+    })
+    .then(() => {
+      console.log(`${tweetString} sent successfully To ${recipientId} 💪💪`);
+    });
 }
 
 function digTweet(authorUserName, tweetId, recipientId) {
@@ -95,19 +99,6 @@ function digTweet(authorUserName, tweetId, recipientId) {
 
         // call digTweet on referenced tweets
         digTweet(dugTweetAuthorUserName, dugTweetReferencedTweetId, recipientId);
-      } else {
-        tweetsToSend[recipientId].reverse();
-        tweetsToSend[recipientId].forEach((msg, i) => {
-          const message = msg;
-          T.post('direct_messages/events/new', message)
-            .catch((err) => {
-              console.error('error', err.stack);
-            })
-            .then(() => {
-              console.log(`${message.event.message_create.message_data.text} sent successfully To ${recipientId} 💪💪`);
-            });
-        });
-        console.log(JSON.stringify(tweetsToSend[recipientId]));
       }
     });
   }
@@ -126,7 +117,6 @@ function subscribeToUserActivity() {
       userActivity
         .on('tweet_create', (data) => {
           if (data.in_reply_to_status_id) {
-            tweetsToSend[data.user.id] = [];
             digTweet(data.in_reply_to_screen_name, data.in_reply_to_status_id_str, data.user.id);
           } else {
             console.log(`${data.id_str}: A tweet was created but it's being ignored since it is not a mention`);
