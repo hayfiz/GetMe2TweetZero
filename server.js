@@ -107,7 +107,7 @@ function digTweet(authorUserName, tweetId, recipientId) {
         digTweet(dugTweetAuthorUserName, dugTweetReferencedTweetId, recipientId);
       } else {
         tweetsToSend[recipientId].reverse();
-        tweetsToSend[recipientId].forEach((msg, i) => { _.debounce(sendTweet(msg, 500)); });
+        tweetsToSend[recipientId].forEach((msg, i) => { _.debounce(sendTweet(msg), 500); });
         console.log(JSON.stringify(tweetsToSend[recipientId]));
       }
     });
