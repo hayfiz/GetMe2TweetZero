@@ -65,7 +65,7 @@ function subscribeToUserActivity() {
         .on('tweet_create', (data) => {
           console.log(JSON.stringify(data));
           if (data.in_reply_to_status_id) {
-            digTweet(data.user.screen_name, data.in_reply_to_status_id_str, data.user.id);
+            digTweet(data.in_reply_to_screen_name, data.in_reply_to_status_id_str, data.user.id);
           } else {
             console.log(`${data.id_str}: A tweet was created but it's being ignored since it is not a mention`);
           }
@@ -160,13 +160,13 @@ function sendTweetToRequestor(authorUserName, tweetId, recipientId) {
 
   console.log(`Sending tweet >>>>>>>>> ${tweetString}`);
 
-  T.post('direct_messages/events/new', msg)
-    .catch(err => {
-      console.error('error', err.stack);
-    })
-    .then(result => {
-      console.log(`Message sent successfully To ${recipientId} 💪💪`);
-    });
+  // T.post('direct_messages/events/new', msg)
+  //   .catch(err => {
+  //     console.error('error', err.stack);
+  //   })
+  //   .then(result => {
+  //     console.log(`Message sent successfully To ${recipientId} 💪💪`);
+  //   });
 }
 
 app.listen(port, () => {
