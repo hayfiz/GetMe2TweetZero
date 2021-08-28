@@ -64,7 +64,7 @@ function subscribeToUserActivity() {
     .then((userActivity) => {
       userActivity
         .on('tweet_create', (data) => {
-          console.log(JSON.stringify(data));
+          // console.log(JSON.stringify(data));
           if (data.in_reply_to_status_id) {
             digTweet(data.in_reply_to_screen_name, data.in_reply_to_status_id_str, data.user.id);
           } else {
@@ -119,23 +119,19 @@ if (process.env.GET_TWITTER_WEBHOOK_INFO === 'Y') {
 async function digTweet(authorUserName, tweetId, recipientId) {
   if (tweetId) {
   // search for referenced tweets
-    const searchedTweet = await searchForTweet(tweetId).then(async (value) => {
+    searchForTweet(tweetId).then(async (value) => {
       if (value && value.data.referenced_tweets) {
         var authorUserName = value.includes.users[0].username;
         var tweetId = value.data.referenced_tweets[0].id;
 
         // call digTweet on referenced tweets
-        await digTweet(authorUserName, tweetId, recipientId);
+        digTweet(authorUserName, tweetId, recipientId);
       }
     });
-    if (searchedTweet) {
-      sendTweetToRequestor(authorUserName, tweetId, recipientId);
-    }
-  } else {
-    sendTweetToRequestor(authorUserName, tweetId, recipientId);
   }
 
   // dm referenced tweet to owner
+  sendTweetToRequestor(authorUserName, tweetId, recipientId);
 }
 
 async function searchForTweet(tweetId) {
