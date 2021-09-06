@@ -93,6 +93,9 @@ function sendTweetToRequestor(authorUserName, tweetId, recipientId) {
 }
 
 function digTweet(authorUserName, tweetId, recipientId) {
+  // dm referenced tweet to owner
+  sendTweetToRequestor(authorUserName, tweetId, recipientId);
+
   if (tweetId) {
   // search for referenced tweets
     searchForTweet(tweetId).then((value) => {
@@ -102,15 +105,10 @@ function digTweet(authorUserName, tweetId, recipientId) {
 
         // call digTweet on referenced tweets
         digTweet(dugTweetAuthorUserName, dugTweetReferencedTweetId, recipientId);
+      } else {
+        console.log(JSON.stringify(tweets));
       }
     });
-  }
-
-  // dm referenced tweet to owner
-  sendTweetToRequestor(authorUserName, tweetId, recipientId);
-
-  if (!tweetId) {
-    console.log(JSON.stringify(tweets));
   }
 }
 
