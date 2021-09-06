@@ -100,7 +100,7 @@ function sendTweetToRequestor(authorUserName, tweetId, recipientId) {
     },
   };
 
-  buildTweetDisplayObject(tweetId);
+  buildTweetDisplayObject(tweetId, recipientId);
   T.post('direct_messages/events/new', msg)
     .catch((err) => {
       console.error('error', err.stack);
