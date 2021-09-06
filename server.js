@@ -57,10 +57,17 @@ if (process.env.REGISTER_TWITTER_WEBHOOK === 'Y') {
 
 function searchForTweet(tweetId) {
   return client.v2.singleTweet(tweetId, {
-    'expansions': [
-      'referenced_tweets.id.author_id'
-    ],
-    'tweet.fields': ['referenced_tweets']
+    'expansions': ['referenced_tweets.id.author_id'],
+    'tweet.fields': ['referenced_tweets'],
+    'user.fields': ['profile_image_url', 'username'],
+  });
+}
+
+function buildTweetDisplayObject(tweetId) {
+  client.v2.singleTweet(tweetId, {
+    'user.fields': ['profile_image_url', 'username'],
+  }).then((value) => {
+    console.log(JSON.stringify(value));
   });
 }
 
@@ -82,7 +89,8 @@ function sendTweetToRequestor(authorUserName, tweetId, recipientId) {
     },
   };
 
-  tweets[recipientId].push(msg);
+  // tweets[recipientId].push(msg);
+  buildTweetDisplayObject(tweetId);
   T.post('direct_messages/events/new', msg)
     .catch((err) => {
       console.error('error', err.stack);
