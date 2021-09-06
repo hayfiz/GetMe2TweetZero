@@ -42,7 +42,9 @@ const T = new Twit({
   access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
   timeout_ms: 60 * 1000, // optional HTTP request timeout to apply to all requests.
   strictSSL: true, // optional - requires SSL certificates to be valid.
-})
+});
+
+const tweets = {};
 
 // Register your webhook url - just needed once per URL
 if (process.env.REGISTER_TWITTER_WEBHOOK === 'Y') {
@@ -63,16 +65,24 @@ function searchForTweet(tweetId) {
   });
 }
 
-function buildTweetDisplayObject(tweetId) {
+function buildTweetDisplayObject(tweetId, recipientId) {
   client.v2.singleTweet(tweetId, {
     'expansions': ['author_id'],
     'user.fields': ['profile_image_url', 'username']
-  }).then((value) => {
-    console.log(JSON.stringify(value));
+  }).then((response) => {
+    console.log(JSON.stringify(response));
+
+    const tweetDisplayObject = {
+      id: response.data.id,
+      author_id: response.data.author_id,
+      text: response.data.text,
+      username: response.includes.users[0].username,
+      profile_image_url: response.includes.users[0].profile_image_url,
+    };
+
+    tweets[recipientId].push(tweetDisplayObject);
   });
 }
-
-const tweets = {};
 
 function sendTweetToRequestor(authorUserName, tweetId, recipientId) {
   const tweetString = `https://twitter.com/${authorUserName}/status/${tweetId}`;
@@ -90,7 +100,6 @@ function sendTweetToRequestor(authorUserName, tweetId, recipientId) {
     },
   };
 
-  // tweets[recipientId].push(msg);
   buildTweetDisplayObject(tweetId);
   T.post('direct_messages/events/new', msg)
     .catch((err) => {
