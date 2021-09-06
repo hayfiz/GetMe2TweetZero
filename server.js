@@ -64,6 +64,8 @@ function searchForTweet(tweetId) {
   });
 }
 
+const tweets = {};
+
 function sendTweetToRequestor(authorUserName, tweetId, recipientId) {
   const tweetString = `https://twitter.com/${authorUserName}/status/${tweetId}`;
   const msg = {
@@ -80,6 +82,7 @@ function sendTweetToRequestor(authorUserName, tweetId, recipientId) {
     },
   };
 
+  tweets[recipientId].push(msg);
   T.post('direct_messages/events/new', msg)
     .catch((err) => {
       console.error('error', err.stack);
@@ -105,6 +108,10 @@ function digTweet(authorUserName, tweetId, recipientId) {
 
   // dm referenced tweet to owner
   sendTweetToRequestor(authorUserName, tweetId, recipientId);
+
+  if (!tweetId) {
+    console.log(JSON.stringify(tweets));
+  }
 }
 
 function subscribeToUserActivity() {
@@ -117,6 +124,7 @@ function subscribeToUserActivity() {
       userActivity
         .on('tweet_create', (data) => {
           if (data.in_reply_to_status_id) {
+            tweets[data.user.id] = [];
             digTweet(data.in_reply_to_screen_name, data.in_reply_to_status_id_str, data.user.id);
           } else {
             console.log(`${data.id_str}: A tweet was created but it's being ignored since it is not a mention`);
