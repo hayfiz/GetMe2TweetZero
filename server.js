@@ -65,7 +65,7 @@ function searchForTweet(tweetId) {
   });
 }
 
-function buildTweetDisplayObject(tweetId, recipientId) {
+function saveTweetDisplayObject(tweetId, recipientId) {
   client.v2.singleTweet(tweetId, {
     'expansions': ['author_id'],
     'user.fields': ['profile_image_url', 'username']
@@ -100,7 +100,8 @@ function sendTweetToRequestor(authorUserName, tweetId, recipientId) {
     },
   };
 
-  buildTweetDisplayObject(tweetId, recipientId);
+  saveTweetDisplayObject(tweetId, recipientId);
+
   T.post('direct_messages/events/new', msg)
     .catch((err) => {
       console.error('error', err.stack);
