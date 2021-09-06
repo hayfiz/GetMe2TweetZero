@@ -65,7 +65,9 @@ function searchForTweet(tweetId) {
 
 function buildTweetDisplayObject(tweetId) {
   client.v2.singleTweet(tweetId, {
-    'user.fields': ['profile_image_url', 'username'],
+    'expansions': ['referenced_tweets.id.author_id'],
+    'tweet.fields': ['referenced_tweets'],
+    'user.fields': ['profile_image_url', 'username']
   }).then((value) => {
     console.log(JSON.stringify(value));
   });
