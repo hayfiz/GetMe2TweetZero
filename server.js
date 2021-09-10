@@ -44,15 +44,17 @@ const T = new Twit({
   strictSSL: true, // optional - requires SSL certificates to be valid.
 });
 
-const tweetsByRecipient = {};
+const tweetsForUser = {};
 
 app.get('/tweets/:recipientId', (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   const { recipientId } = req.params;
-  if (tweetsByRecipient[recipientId]) {
-    if (tweetsByRecipient[recipientId].complete) {
-      const tweetsForRecipient = tweetsByRecipient[recipientId].tweets;
+  if (tweetsForUser[recipientId]) {
+    if (tweetsForUser[recipientId].complete) {
+      const threadedConversation = tweetsForUser[recipientId].tweets;
 
-      res.send(tweetsForRecipient);
+      res.send(threadedConversation);
     }
 
     res.send("We're still threading these tweets together, try again soon :)");
@@ -95,7 +97,7 @@ function saveTweetDisplayObject(tweetId, recipientId) {
       profile_image_url: response.includes.users[0].profile_image_url,
     };
 
-    tweetsByRecipient[recipientId].tweets.push(tweetDisplayObject);
+    tweetsForUser[recipientId].tweets.push(tweetDisplayObject);
   });
 }
 
@@ -140,8 +142,8 @@ function digTweet(authorUserName, tweetId, recipientId) {
         // call digTweet on referenced tweets
         digTweet(dugTweetAuthorUserName, dugTweetReferencedTweetId, recipientId);
       } else {
-        tweetsByRecipient[recipientId].complete = true;
-        console.log(JSON.stringify(tweetsByRecipient));
+        tweetsForUser[recipientId].complete = true;
+        console.log(JSON.stringify(tweetsForUser));
       }
     });
   }
@@ -157,7 +159,7 @@ function subscribeToUserActivity() {
       userActivity
         .on('tweet_create', (data) => {
           if (data.in_reply_to_status_id) {
-            tweetsByRecipient[data.user.id] = {
+            tweetsForUser[data.user.id] = {
               tweets: [],
               complete: false,
             };
