@@ -44,7 +44,7 @@ const T = new Twit({
   strictSSL: true, // optional - requires SSL certificates to be valid.
 });
 
-const tweets = {};
+const tweetsByRecipient = {};
 
 // Register your webhook url - just needed once per URL
 if (process.env.REGISTER_TWITTER_WEBHOOK === 'Y') {
@@ -80,7 +80,7 @@ function saveTweetDisplayObject(tweetId, recipientId) {
       profile_image_url: response.includes.users[0].profile_image_url,
     };
 
-    tweets[recipientId][tweets].push(tweetDisplayObject);
+    tweetsByRecipient[recipientId].tweets.push(tweetDisplayObject);
   });
 }
 
@@ -125,7 +125,7 @@ function digTweet(authorUserName, tweetId, recipientId) {
         // call digTweet on referenced tweets
         digTweet(dugTweetAuthorUserName, dugTweetReferencedTweetId, recipientId);
       } else {
-        console.log(JSON.stringify(tweets));
+        console.log(JSON.stringify(tweetsByRecipient));
       }
     });
   }
@@ -141,7 +141,7 @@ function subscribeToUserActivity() {
       userActivity
         .on('tweet_create', (data) => {
           if (data.in_reply_to_status_id) {
-            tweets[data.user.id] = {
+            tweetsByRecipient[data.user.id] = {
               tweets: [],
               complete: false,
             };
