@@ -46,6 +46,11 @@ const T = new Twit({
 
 const tweetsByRecipient = {};
 
+app.get('/tweets/:recipientId', (req, res) => {
+  const {recipientId} = req.params;
+  const tweetsForRecipient = tweetsByRecipient[recipientId].tweets;
+});
+
 // Register your webhook url - just needed once per URL
 if (process.env.REGISTER_TWITTER_WEBHOOK === 'Y') {
   console.log('Attempting to register webhook');
