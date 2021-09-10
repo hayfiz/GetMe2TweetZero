@@ -48,9 +48,17 @@ const tweetsByRecipient = {};
 
 app.get('/tweets/:recipientId', (req, res) => {
   const { recipientId } = req.params;
-  const tweetsForRecipient = tweetsByRecipient[recipientId].tweets;
+  if (tweetsByRecipient[recipientId]) {
+    if (tweetsByRecipient[recipientId].complete) {
+      const tweetsForRecipient = tweetsByRecipient[recipientId].tweets;
 
-  res.send(tweetsForRecipient);
+      res.send(tweetsForRecipient);
+    }
+
+    res.send("We're still threading these tweets together, try again soon :)");
+  }
+
+  res.send("We've not threaded any tweets for this id just yet, please try again later)");
 });
 
 // Register your webhook url - just needed once per URL
