@@ -52,7 +52,7 @@ app.get('/tweets/:recipientId', (req, res) => {
   const { recipientId } = req.params;
   if (tweetsForUser[recipientId]) {
     if (tweetsForUser[recipientId].complete) {
-      const threadedConversation = tweetsForUser[recipientId].tweets;
+      const threadedConversation = tweetsForUser[recipientId].tweets.reverse();
 
       res.send(threadedConversation);
     }
