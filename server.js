@@ -47,8 +47,10 @@ const T = new Twit({
 const tweetsByRecipient = {};
 
 app.get('/tweets/:recipientId', (req, res) => {
-  const {recipientId} = req.params;
+  const { recipientId } = req.params;
   const tweetsForRecipient = tweetsByRecipient[recipientId].tweets;
+
+  res.send(tweetsForRecipient);
 });
 
 // Register your webhook url - just needed once per URL
