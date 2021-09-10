@@ -7,7 +7,7 @@ const { TwitterApi } = require('twitter-api-v2');
 const app = express()
 app.use(bodyParser.json());
 
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 3000;
 
 // OAuth 1.0a (User context)
 const client = new TwitterApi({
@@ -80,7 +80,7 @@ function saveTweetDisplayObject(tweetId, recipientId) {
       profile_image_url: response.includes.users[0].profile_image_url,
     };
 
-    tweets[recipientId].push(tweetDisplayObject);
+    tweets[recipientId][tweets].push(tweetDisplayObject);
   });
 }
 
@@ -141,7 +141,10 @@ function subscribeToUserActivity() {
       userActivity
         .on('tweet_create', (data) => {
           if (data.in_reply_to_status_id) {
-            tweets[data.user.id] = [];
+            tweets[data.user.id] = {
+              tweets: [],
+              complete: false,
+            };
             digTweet(data.in_reply_to_screen_name, data.in_reply_to_status_id_str, data.user.id);
           } else {
             console.log(`${data.id_str}: A tweet was created but it's being ignored since it is not a mention`);
