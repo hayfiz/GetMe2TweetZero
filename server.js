@@ -125,6 +125,7 @@ function digTweet(authorUserName, tweetId, recipientId) {
         // call digTweet on referenced tweets
         digTweet(dugTweetAuthorUserName, dugTweetReferencedTweetId, recipientId);
       } else {
+        tweetsByRecipient[recipientId].complete = true;
         console.log(JSON.stringify(tweetsByRecipient));
       }
     });
