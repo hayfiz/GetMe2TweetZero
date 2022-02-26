@@ -46,13 +46,13 @@ const T = new Twit({
 
 const tweetsForUser = {};
 
-app.get('/tweets/:recipientId', (req, res) => {
+app.get('/tweets/:screenName', (req, res) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  const { recipientId } = req.params;
-  if (tweetsForUser[recipientId]) {
-    if (tweetsForUser[recipientId].complete) {
-      const threadedConversation = tweetsForUser[recipientId].tweets.reverse();
+  const { screenName } = req.params;
+  if (tweetsForUser[screenName]) {
+    if (tweetsForUser[screenName].complete) {
+      const threadedConversation = tweetsForUser[screenName].tweets.reverse();
 
       res.send(threadedConversation);
     }
@@ -82,7 +82,7 @@ function searchForTweet(tweetId) {
   });
 }
 
-function saveTweetDisplayObject(tweetId, recipientId) {
+function saveTweetDisplayObject(tweetId, screenName) {
   client.v2.singleTweet(tweetId, {
     expansions: ['author_id'],
     'user.fields': ['profile_image_url', 'username']
@@ -97,18 +97,18 @@ function saveTweetDisplayObject(tweetId, recipientId) {
       profile_image_url: response.includes.users[0].profile_image_url,
     };
 
-    tweetsForUser[recipientId].tweets.push(tweetDisplayObject);
+    tweetsForUser[screenName].tweets.push(tweetDisplayObject);
   });
 }
 
-function sendTweetToRequestor(authorUserName, tweetId, recipientId) {
+function sendTweetToRequestor(authorUserName, tweetId, screenName) {
   const tweetString = `https://twitter.com/${authorUserName}/status/${tweetId}`;
   const msg = {
     event: {
       type: 'message_create',
       message_create: {
         target: {
-          screen_name: recipientId,
+          screen_name: screenName,
         },
         message_data: {
           text: tweetString,
@@ -117,19 +117,19 @@ function sendTweetToRequestor(authorUserName, tweetId, recipientId) {
     },
   };
 
-  saveTweetDisplayObject(tweetId, recipientId);
+  saveTweetDisplayObject(tweetId, screenName);
 
   T.post('direct_messages/events/new', msg)
     .catch((err) => {
       console.error('error', err.stack);
     })
     .then(() => {
-      console.log(`${tweetString} sent successfully To ${recipientId} 💪💪`);
+      console.log(`${tweetString} sent successfully To ${screenName} 💪💪`);
     });
 }
 
-// function sendUserLinkToTweets(recipientId) {
-//   // T.get('users/lookup', { screen_name: recipientId })
+// function sendUserLinkToTweets(screenName) {
+//   // T.get('users/lookup', { screen_name: screenName })
 //   //   .catch((err) => {
 //   //     console.error('error', err.stack);
 //   //   })
@@ -138,10 +138,10 @@ function sendTweetToRequestor(authorUserName, tweetId, recipientId) {
 //   //   });
 // }
 
-function digTweet(authorUserName, tweetId, recipientId) {
+function digTweet(authorUserName, tweetId, screenName) {
   // dm referenced tweet to owner
-  sendTweetToRequestor(authorUserName, tweetId, recipientId);
-  // saveTweetDisplayObject(tweetId, recipientId);
+  sendTweetToRequestor(authorUserName, tweetId, screenName);
+  // saveTweetDisplayObject(tweetId, screenName);
 
   if (tweetId) {
   // search for referenced tweets
@@ -151,10 +151,10 @@ function digTweet(authorUserName, tweetId, recipientId) {
         const dugTweetReferencedTweetId = value.data.referenced_tweets[0].id;
 
         // call digTweet on referenced tweets
-        digTweet(dugTweetAuthorUserName, dugTweetReferencedTweetId, recipientId);
+        digTweet(dugTweetAuthorUserName, dugTweetReferencedTweetId, screenName);
       } else {
-        tweetsForUser[recipientId].complete = true;
-        // sendUserLinkToTweets(recipientId);
+        tweetsForUser[screenName].complete = true;
+        // sendUserLinkToTweets(screenName);
         // console.log(JSON.stringify(tweetsForUser));
       }
     });
