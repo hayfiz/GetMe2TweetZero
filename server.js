@@ -101,14 +101,14 @@ function saveTweetDisplayObject(tweetId, screenName) {
   });
 }
 
-function sendTweetToRequestor(authorUserName, tweetId, screenName) {
+function sendTweetToRequestor(authorUserName, tweetId, screenName, recipientId) {
   const tweetString = `https://twitter.com/${authorUserName}/status/${tweetId}`;
   const msg = {
     event: {
       type: 'message_create',
       message_create: {
         target: {
-          screen_name: screenName,
+          recipient_id: recipientId,
         },
         message_data: {
           text: tweetString,
@@ -138,9 +138,9 @@ function sendTweetToRequestor(authorUserName, tweetId, screenName) {
 //   //   });
 // }
 
-function digTweet(authorUserName, tweetId, screenName) {
+function digTweet(authorUserName, tweetId, screenName, recipientId) {
   // dm referenced tweet to owner
-  sendTweetToRequestor(authorUserName, tweetId, screenName);
+  sendTweetToRequestor(authorUserName, tweetId, screenName, recipientId);
   // saveTweetDisplayObject(tweetId, screenName);
 
   if (tweetId) {
@@ -151,7 +151,7 @@ function digTweet(authorUserName, tweetId, screenName) {
         const dugTweetReferencedTweetId = value.data.referenced_tweets[0].id;
 
         // call digTweet on referenced tweets
-        digTweet(dugTweetAuthorUserName, dugTweetReferencedTweetId, screenName);
+        digTweet(dugTweetAuthorUserName, dugTweetReferencedTweetId, screenName, recipientId);
       } else {
         tweetsForUser[screenName].complete = true;
         // sendUserLinkToTweets(screenName);
@@ -178,7 +178,9 @@ function subscribeToUserActivity() {
             };
             digTweet(data.in_reply_to_screen_name,
               data.in_reply_to_status_id_str,
-              data.user.screen_name);
+              data.user.screen_name,
+              data.user.id_str
+            );
           } else {
             console.log(`${data.id_str}: A tweet was created but it's being ignored since it is not a mention`);
           }
