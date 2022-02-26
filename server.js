@@ -172,7 +172,7 @@ function subscribeToUserActivity() {
         .on('tweet_create', (data) => {
           console.log("tweet create data: =>" + JSON.stringify(data));
           if (data.in_reply_to_status_id) {
-            tweetsForUser[data.user.FeezyxPop] = {
+            tweetsForUser[data.user.screen_name] = {
               tweets: [],
               complete: false,
             };
