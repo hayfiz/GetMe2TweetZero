@@ -141,6 +141,7 @@ function sendUserLinkToTweets(recipientId) {
 function digTweet(authorUserName, tweetId, recipientId) {
   // dm referenced tweet to owner
   // sendTweetToRequestor(authorUserName, tweetId, recipientId);
+  saveTweetDisplayObject(tweetId, recipientId);
 
   if (tweetId) {
   // search for referenced tweets
@@ -169,7 +170,7 @@ function subscribeToUserActivity() {
     .then((userActivity) => {
       userActivity
         .on('tweet_create', (data) => {
-          console.log("tweet create data: =>" + data);
+          console.log("tweet create data: =>" + JSON.stringify(data));
           if (data.in_reply_to_status_id) {
             tweetsForUser[data.user.id] = {
               tweets: [],
