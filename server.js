@@ -117,8 +117,6 @@ function sendTweetToRequestor(authorUserName, tweetId, screenName, recipientId) 
     },
   };
 
-  saveTweetDisplayObject(tweetId, screenName);
-
   T.post('direct_messages/events/new', msg)
     .catch((err) => {
       console.error('error', err.stack);
@@ -128,20 +126,31 @@ function sendTweetToRequestor(authorUserName, tweetId, screenName, recipientId) 
     });
 }
 
-// function sendUserLinkToTweets(screenName) {
-//   // T.get('users/lookup', { screen_name: screenName })
-//   //   .catch((err) => {
-//   //     console.error('error', err.stack);
-//   //   })
-//   //   .then((response) => {
-//   //     console.log("user lookup response =>" + response);
-//   //   });
-// }
+function compareTweetsById(a, b) {
+  if (a.id < b.id) {
+    return -1;
+  }
+
+  if (a.id > b.id) {
+    return 1;
+  }
+
+  return 0;
+}
+
+function sendTweets(screenName, recipientId) {
+  const tweetsToSendToUser = tweetsForUser[screenName].tweets;
+  tweetsToSendToUser.sort(compareTweetsById);
+
+  tweetsToSendToUser.forEach((tweet) => {
+    sendTweetToRequestor(tweet.username, tweet.id, screenName, recipientId);
+  });
+}
 
 function digTweet(authorUserName, tweetId, screenName, recipientId) {
   // dm referenced tweet to owner
-  sendTweetToRequestor(authorUserName, tweetId, screenName, recipientId);
-  // saveTweetDisplayObject(tweetId, screenName);
+  // sendTweetToRequestor(authorUserName, tweetId, screenName, recipientId);
+  saveTweetDisplayObject(tweetId, screenName);
 
   if (tweetId) {
   // search for referenced tweets
@@ -154,7 +163,7 @@ function digTweet(authorUserName, tweetId, screenName, recipientId) {
         digTweet(dugTweetAuthorUserName, dugTweetReferencedTweetId, screenName, recipientId);
       } else {
         tweetsForUser[screenName].complete = true;
-        // sendUserLinkToTweets(screenName);
+        sendTweets(screenName, recipientId);
         // console.log(JSON.stringify(tweetsForUser));
       }
     });
