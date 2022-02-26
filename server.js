@@ -76,7 +76,7 @@ if (process.env.REGISTER_TWITTER_WEBHOOK === 'Y') {
 
 function searchForTweet(tweetId) {
   return client.v2.singleTweet(tweetId, {
-    'expansions': ['referenced_tweets.id.author_id'],
+    expansions: ['referenced_tweets.id.author_id'],
     'tweet.fields': ['referenced_tweets'],
     'user.fields': ['profile_image_url', 'username'],
   });
@@ -84,7 +84,7 @@ function searchForTweet(tweetId) {
 
 function saveTweetDisplayObject(tweetId, recipientId) {
   client.v2.singleTweet(tweetId, {
-    'expansions': ['author_id'],
+    expansions: ['author_id'],
     'user.fields': ['profile_image_url', 'username']
   }).then((response) => {
     console.log(JSON.stringify(response));
@@ -128,9 +128,19 @@ function sendTweetToRequestor(authorUserName, tweetId, recipientId) {
     });
 }
 
+function sendUserLinkToTweets(recipientId) {
+  T.get('users/lookup', { user_id: recipientId }
+    .catch((err) => {
+      console.error('error', err.stack);
+    })
+    .then((response) => {
+      console.log("sendTweet response =>" + response );
+    });
+}
+
 function digTweet(authorUserName, tweetId, recipientId) {
   // dm referenced tweet to owner
-  sendTweetToRequestor(authorUserName, tweetId, recipientId);
+  // sendTweetToRequestor(authorUserName, tweetId, recipientId);
 
   if (tweetId) {
   // search for referenced tweets
@@ -143,6 +153,7 @@ function digTweet(authorUserName, tweetId, recipientId) {
         digTweet(dugTweetAuthorUserName, dugTweetReferencedTweetId, recipientId);
       } else {
         tweetsForUser[recipientId].complete = true;
+        sendUserLinkToTweets(recipientId);
         console.log(JSON.stringify(tweetsForUser));
       }
     });
