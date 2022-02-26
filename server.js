@@ -87,8 +87,6 @@ function saveTweetDisplayObject(tweetId, screenName) {
     expansions: ['author_id'],
     'user.fields': ['profile_image_url', 'username']
   }).then((response) => {
-    console.log(JSON.stringify(response));
-
     const tweetDisplayObject = {
       id: response.data.id,
       author_id: response.data.author_id,
@@ -125,7 +123,7 @@ function sendTweetToRequestor(authorUserName, tweetId, screenName, recipientId) 
       console.log(`${tweetString} sent successfully To ${screenName} 💪💪`);
       const tweetsToSendToUser = tweetsForUser[screenName].tweets;
       tweetsToSendToUser.shift();
-      if (tweetsToSendToUser.length != 0) {
+      if (tweetsToSendToUser.length !== 0) {
         const tweet = tweetsToSendToUser[0];
         sendTweetToRequestor(tweet.username, tweet.id, screenName, recipientId);
       }
@@ -145,16 +143,12 @@ function compareTweetsById(a, b) {
 }
 
 function sendTweets(screenName, recipientId) {
-  const tweetsToSendToUser = tweetsForUser[screenName].tweets;
-  tweetsToSendToUser.sort(compareTweetsById);
-
-  const tweet = tweetsToSendToUser[0];
+  const tweet = tweetsForUser[screenName].tweets[0];
   sendTweetToRequestor(tweet.username, tweet.id, screenName, recipientId);
 }
 
 function digTweet(authorUserName, tweetId, screenName, recipientId) {
   // dm referenced tweet to owner
-  // sendTweetToRequestor(authorUserName, tweetId, screenName, recipientId);
   saveTweetDisplayObject(tweetId, screenName);
 
   if (tweetId) {
@@ -168,8 +162,8 @@ function digTweet(authorUserName, tweetId, screenName, recipientId) {
         digTweet(dugTweetAuthorUserName, dugTweetReferencedTweetId, screenName, recipientId);
       } else {
         tweetsForUser[screenName].complete = true;
+        tweetsForUser[screenName].tweets.sort(compareTweetsById);
         sendTweets(screenName, recipientId);
-        // console.log(JSON.stringify(tweetsForUser));
       }
     });
   }
@@ -193,8 +187,7 @@ function subscribeToUserActivity() {
             digTweet(data.in_reply_to_screen_name,
               data.in_reply_to_status_id_str,
               data.user.screen_name,
-              data.user.id_str
-            );
+              data.user.id_str);
           } else {
             console.log(`${data.id_str}: A tweet was created but it's being ignored since it is not a mention`);
           }
