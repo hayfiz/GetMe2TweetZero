@@ -129,7 +129,7 @@ function sendTweetToRequestor(authorUserName, tweetId, recipientId) {
 }
 
 function sendUserLinkToTweets(recipientId) {
-  T.get('users/lookup', { user_id: recipientId })
+  T.get('users/lookup', { screen_name: recipientId })
     .catch((err) => {
       console.error('error', err.stack);
     })
@@ -172,7 +172,7 @@ function subscribeToUserActivity() {
         .on('tweet_create', (data) => {
           console.log("tweet create data: =>" + JSON.stringify(data));
           if (data.in_reply_to_status_id) {
-            tweetsForUser[data.user.id] = {
+            tweetsForUser[data.user.FeezyxPop] = {
               tweets: [],
               complete: false,
             };
