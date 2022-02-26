@@ -176,7 +176,9 @@ function subscribeToUserActivity() {
               tweets: [],
               complete: false,
             };
-            digTweet(data.in_reply_to_screen_name, data.in_reply_to_status_id_str, data.user.id);
+            digTweet(data.in_reply_to_screen_name,
+              data.in_reply_to_status_id_str,
+              data.user.screen_name);
           } else {
             console.log(`${data.id_str}: A tweet was created but it's being ignored since it is not a mention`);
           }
