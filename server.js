@@ -108,7 +108,7 @@ function sendTweetToRequestor(authorUserName, tweetId, recipientId) {
       type: 'message_create',
       message_create: {
         target: {
-          recipient_id: recipientId,
+          screen_name: recipientId,
         },
         message_data: {
           text: tweetString,
@@ -128,20 +128,20 @@ function sendTweetToRequestor(authorUserName, tweetId, recipientId) {
     });
 }
 
-function sendUserLinkToTweets(recipientId) {
-  T.get('users/lookup', { screen_name: recipientId })
-    .catch((err) => {
-      console.error('error', err.stack);
-    })
-    .then((response) => {
-      console.log("sendTweet response =>" + response );
-    });
-}
+// function sendUserLinkToTweets(recipientId) {
+//   // T.get('users/lookup', { screen_name: recipientId })
+//   //   .catch((err) => {
+//   //     console.error('error', err.stack);
+//   //   })
+//   //   .then((response) => {
+//   //     console.log("user lookup response =>" + response);
+//   //   });
+// }
 
 function digTweet(authorUserName, tweetId, recipientId) {
   // dm referenced tweet to owner
-  // sendTweetToRequestor(authorUserName, tweetId, recipientId);
-  saveTweetDisplayObject(tweetId, recipientId);
+  sendTweetToRequestor(authorUserName, tweetId, recipientId);
+  // saveTweetDisplayObject(tweetId, recipientId);
 
   if (tweetId) {
   // search for referenced tweets
@@ -154,8 +154,8 @@ function digTweet(authorUserName, tweetId, recipientId) {
         digTweet(dugTweetAuthorUserName, dugTweetReferencedTweetId, recipientId);
       } else {
         tweetsForUser[recipientId].complete = true;
-        sendUserLinkToTweets(recipientId);
-        console.log(JSON.stringify(tweetsForUser));
+        // sendUserLinkToTweets(recipientId);
+        // console.log(JSON.stringify(tweetsForUser));
       }
     });
   }
@@ -170,7 +170,7 @@ function subscribeToUserActivity() {
     .then((userActivity) => {
       userActivity
         .on('tweet_create', (data) => {
-          console.log("tweet create data: =>" + JSON.stringify(data));
+          // console.log("tweet create data: =>" + JSON.stringify(data));
           if (data.in_reply_to_status_id) {
             tweetsForUser[data.user.screen_name] = {
               tweets: [],
