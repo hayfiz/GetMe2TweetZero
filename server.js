@@ -169,6 +169,7 @@ function subscribeToUserActivity() {
     .then((userActivity) => {
       userActivity
         .on('tweet_create', (data) => {
+          console.log("tweet create data: =>" + data);
           if (data.in_reply_to_status_id) {
             tweetsForUser[data.user.id] = {
               tweets: [],
