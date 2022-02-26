@@ -129,7 +129,7 @@ function sendTweetToRequestor(authorUserName, tweetId, recipientId) {
 }
 
 function sendUserLinkToTweets(recipientId) {
-  T.get('users/lookup', { user_id: recipientId }
+  T.get('users/lookup', { user_id: recipientId })
     .catch((err) => {
       console.error('error', err.stack);
     })
