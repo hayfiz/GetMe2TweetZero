@@ -123,6 +123,12 @@ function sendTweetToRequestor(authorUserName, tweetId, screenName, recipientId) 
     })
     .then(() => {
       console.log(`${tweetString} sent successfully To ${screenName} 💪💪`);
+      const tweetsToSendToUser = tweetsForUser[screenName].tweets;
+      tweetsToSendToUser.shift();
+      if (tweetsToSendToUser.length != 0) {
+        const tweet = tweetsToSendToUser[0];
+        sendTweetToRequestor(tweet.username, tweet.id, screenName, recipientId);
+      }
     });
 }
 
@@ -142,9 +148,8 @@ function sendTweets(screenName, recipientId) {
   const tweetsToSendToUser = tweetsForUser[screenName].tweets;
   tweetsToSendToUser.sort(compareTweetsById);
 
-  tweetsToSendToUser.forEach((tweet) => {
-    sendTweetToRequestor(tweet.username, tweet.id, screenName, recipientId);
-  });
+  const tweet = tweetsToSendToUser[0];
+  sendTweetToRequestor(tweet.username, tweet.id, screenName, recipientId);
 }
 
 function digTweet(authorUserName, tweetId, screenName, recipientId) {
