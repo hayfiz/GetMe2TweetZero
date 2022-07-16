@@ -98,6 +98,8 @@ function saveTweetDisplayObject(tweetId, screenName) {
   });
 }
 
+const millisecondsToWait = 5000;
+
 function sendTweetToRequestor(authorUserName, tweetId, screenName, recipientId) {
   const tweetString = `https://twitter.com/${authorUserName}/status/${tweetId}`;
   const msg = {
@@ -124,10 +126,13 @@ function sendTweetToRequestor(authorUserName, tweetId, screenName, recipientId) 
       tweetsToSendToUser.shift();
       if (tweetsToSendToUser.length !== 0) {
         const tweet = tweetsToSendToUser[0];
-        sendTweetToRequestor(tweet.username, tweet.id, screenName, recipientId);
+        setTimeout(() => {
+          sendTweetToRequestor(tweet.username, tweet.id, screenName, recipientId);
+        }, millisecondsToWait);
       }
     });
 }
+
 
 function compareTweetsById(a, b) {
   if (a.id < b.id) {
