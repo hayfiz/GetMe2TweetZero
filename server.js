@@ -109,6 +109,7 @@ function saveTweetDisplayObject(tweetId, screenName) {
 const millisecondsToWait = process.env.MILLI_SECONDS_TO_WAIT || 0;
 
 function sendTweetToRequestor(authorUserName, tweetId, screenName, recipientId) {
+  console.log(`Attempting to send tweet ${tweetId} to ${screenName}⏳`);
   const tweetString = `https://twitter.com/${authorUserName}/status/${tweetId}`;
   const msg = {
     event: {
@@ -155,7 +156,7 @@ function compareTweetsById(a, b) {
 }
 
 function sendTweets(screenName, recipientId) {
-  tweetsForUser[screenName].tweets.forEach((element) => console.log(JSON.stringify(element)));
+  // tweetsForUser[screenName].tweets.forEach((element) => console.log(JSON.stringify(element)));
 
   const tweet = tweetsForUser[screenName].tweets[0];
   sendTweetToRequestor(tweet.username, tweet.id, screenName, recipientId);
