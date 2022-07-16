@@ -86,7 +86,7 @@ function searchForTweet(tweetId) {
 function saveTweetDisplayObject(tweetId, screenName) {
   console.log(`Attempting to save tweet >>>>>>>>> ${tweetId}`);
   return new Promise((resolve) => {
-    resolve(client.v2.singleTweet(tweetId, {
+    client.v2.singleTweet(tweetId, {
       expansions: ['author_id'],
       'user.fields': ['profile_image_url', 'username']
     }).then((response) => {
@@ -100,7 +100,8 @@ function saveTweetDisplayObject(tweetId, screenName) {
 
       tweetsForUser[screenName].tweets.push(tweetDisplayObject);
       console.log(`Saved tweet >>>>>>>>> ${tweetId}`);
-    }));
+      resolve();
+    });
   });
 }
 
@@ -160,9 +161,9 @@ function sendTweets(screenName, recipientId) {
   sendTweetToRequestor(tweet.username, tweet.id, screenName, recipientId);
 }
 
-function digTweet(authorUserName, tweetId, screenName, recipientId) {
+async function digTweet(authorUserName, tweetId, screenName, recipientId) {
   // dm referenced tweet to owner
-  saveTweetDisplayObject(tweetId, screenName);
+  await saveTweetDisplayObject(tweetId, screenName);
 
   if (tweetId) {
   // search for referenced tweets
