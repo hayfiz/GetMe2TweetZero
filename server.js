@@ -84,20 +84,24 @@ function searchForTweet(tweetId) {
 }
 
 function saveTweetDisplayObject(tweetId, screenName) {
-  client.v2.singleTweet(tweetId, {
-    expansions: ['author_id'],
-    'user.fields': ['profile_image_url', 'username']
-  }).then((response) => {
-    const tweetDisplayObject = {
-      id: response.data.id,
-      author_id: response.data.author_id,
-      text: response.data.text,
-      username: response.includes.users[0].username,
-      profile_image_url: response.includes.users[0].profile_image_url,
-    };
+  console.log(`Attempting to save tweet >>>>>>>>> ${tweetId}`);
+  return new Promise((resolve) => {
+    client.v2.singleTweet(tweetId, {
+      expansions: ['author_id'],
+      'user.fields': ['profile_image_url', 'username']
+    }).then((response) => {
+      const tweetDisplayObject = {
+        id: response.data.id,
+        author_id: response.data.author_id,
+        text: response.data.text,
+        username: response.includes.users[0].username,
+        profile_image_url: response.includes.users[0].profile_image_url,
+      };
 
-    console.log(`Saving tweet >>>>>>>>> ${tweetId}`);
-    tweetsForUser[screenName].tweets.push(tweetDisplayObject);
+      tweetsForUser[screenName].tweets.push(tweetDisplayObject);
+      console.log(`Saved tweet >>>>>>>>> ${tweetId}`);
+      resolve();
+    });
   });
 }
 
