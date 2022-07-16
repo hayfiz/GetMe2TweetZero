@@ -101,7 +101,8 @@ function saveTweetDisplayObject(tweetId, screenName) {
   });
 }
 
-const millisecondsToWait = 5000;
+// To include delay inbetween dms
+const millisecondsToWait = process.env.MILLI_SECONDS_TO_WAIT || 0;
 
 function sendTweetToRequestor(authorUserName, tweetId, screenName, recipientId) {
   const tweetString = `https://twitter.com/${authorUserName}/status/${tweetId}`;
