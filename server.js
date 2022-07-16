@@ -74,10 +74,12 @@ if (process.env.REGISTER_TWITTER_WEBHOOK === 'Y') {
 }
 
 function searchForTweet(tweetId) {
-  return client.v2.singleTweet(tweetId, {
-    expansions: ['referenced_tweets.id.author_id'],
-    'tweet.fields': ['referenced_tweets'],
-    'user.fields': ['profile_image_url', 'username'],
+  return new Promise((resolve) => {
+    resolve(client.v2.singleTweet(tweetId, {
+      expansions: ['referenced_tweets.id.author_id'],
+      'tweet.fields': ['referenced_tweets'],
+      'user.fields': ['profile_image_url', 'username'],
+    }))
   });
 }
 
