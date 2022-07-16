@@ -21,15 +21,14 @@ const client = new TwitterApi({
 });
 
 const userActivityWebhook = twitterWebhooks.userActivity({
-  serverUrl: 'https://whats-down-this-hole.herokuapp.com/test/',
+  serverUrl: process.env.TWITTER_WEBHOOK_URL,
   route: '/', // default : '/'
   consumerKey: process.env.TWITTER_CONSUMER_KEY,
   consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
   accessToken: process.env.TWITTER_ACCESS_KEY,
   accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
   environment: process.env.TWITTER_ENVIRONMENT, // default : 'env-beta'
-  appBearerToken:
-  process.env.TWITTER_APP_BEARER_TOKEN,
+  appBearerToken: process.env.TWITTER_APP_BEARER_TOKEN,
   app
 });
 

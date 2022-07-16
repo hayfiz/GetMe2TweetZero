@@ -4,7 +4,7 @@
   "description": "twitter application for tracing the origin of rabbit hole tweets",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "author": "Hayford Iduoriyekemwen",
   "license": "ISC",
