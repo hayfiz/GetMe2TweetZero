@@ -94,6 +94,7 @@ function saveTweetDisplayObject(tweetId, screenName) {
       profile_image_url: response.includes.users[0].profile_image_url,
     };
 
+    console.log(`Saving tweet >>>>>>>>> ${tweetId}`);
     tweetsForUser[screenName].tweets.push(tweetDisplayObject);
   });
 }
