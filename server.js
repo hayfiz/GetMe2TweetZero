@@ -160,16 +160,28 @@ function digTweet(authorUserName, tweetId, screenName, recipientId) {
 
   if (tweetId) {
   // search for referenced tweets
+
+    console.log(`Searching for referenced tweets for >>>>>>>>> ${tweetId}`);
     searchForTweet(tweetId).then((value) => {
       if (value && value.data.referenced_tweets) {
         const dugTweetAuthorUserName = value.includes.users[0].username;
         const dugTweetReferencedTweetId = value.data.referenced_tweets[0].id;
+        console.log(`Found referenced tweets for >>>>>>>>> ${tweetId} digging >>>>> ${dugTweetReferencedTweetId}`);
 
         // call digTweet on referenced tweets
         digTweet(dugTweetAuthorUserName, dugTweetReferencedTweetId, screenName, recipientId);
       } else {
         tweetsForUser[screenName].complete = true;
+        console.log(`Found no referenced tweets for >>>>>>>>> ${tweetId} sending tweets`);
+        console.log('Tweet Ids before sorting --------------');
+        tweetsForUser[screenName].tweets
+          .forEach((element) => console.log(JSON.stringify(element.id)));
+        console.log('---------------------------------------');
         tweetsForUser[screenName].tweets.sort(compareTweetsById);
+        console.log('Tweet Ids after sorting --------------');
+        tweetsForUser[screenName].tweets
+          .forEach((element) => console.log(JSON.stringify(element.id)));
+        console.log('---------------------------------------');
         sendTweets(screenName, recipientId);
       }
     });
