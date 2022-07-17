@@ -155,8 +155,6 @@ function compareTweetsById(a, b) {
 }
 
 function sendTweets(screenName, recipientId) {
-  tweetsForUser[screenName].tweets.forEach((element) => console.log(JSON.stringify(element)));
-
   const tweet = tweetsForUser[screenName].tweets[0];
   sendTweetToRequestor(tweet.username, tweet.id, screenName, recipientId);
 }
